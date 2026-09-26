@@ -390,8 +390,10 @@ function renderMotion(item) {
 // 素材库数据：由 work/build-library-data.py 从本地素材库 styles/*/style.json 抽取
 let libraryData = null;
 let promptTargetValue = "";
-// 本地桥接：跑 work/library-bridge.py 后可直接写入素材库 prompts/ 目录
-const BRIDGE_URL = "http://127.0.0.1:8788";
+// 本地桥接：跑 work/library-bridge.py 后可直接写入素材库 prompts/ 目录。
+// 由桥接自己提供页面时用同源地址，否则回落到默认端口。
+const LOCAL_HOST = ["127.0.0.1", "localhost", "::1"].includes(location.hostname);
+const BRIDGE_URL = LOCAL_HOST ? location.origin : "http://127.0.0.1:8788";
 let bridgeReady = false;
 
 const promptExamples = ["App 首页", "产品落地页", "小红书封面", "汇报 PPT 封面", "微信小程序", "数据看板"];
@@ -549,10 +551,15 @@ async function savePromptFile() {
   if (bridgeReady) {
     setSaveButtonLabel("保存中…");
     try {
+      const entry = libraryData && libraryData[currentDetail.id];
+      const goal = (promptTargetValue || "").trim();
+      const summary = goal
+        ? `使用已归档的字体、配色与动效参数，用于${goal}。`
+        : "使用已归档的字体、配色与动效参数。";
       const response = await fetch(`${BRIDGE_URL}/save-prompt`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, body })
+        body: JSON.stringify({ title, body, summary, libraryId: entry ? entry.libraryId : currentDetail.id })
       });
       const result = await response.json();
       if (result && result.ok) {
