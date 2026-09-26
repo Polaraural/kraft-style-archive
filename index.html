@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#a96f38" />
+    <meta name="description" content="牛皮纸档案袋风格的个人视觉素材库 Demo，用于浏览、筛选和选择风格与动效。" />
+    <title>我的设计档案袋 · 风格素材库</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="paper-noise" aria-hidden="true"></div>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="返回素材库顶部">
+        <span class="brand-mark">PL</span>
+        <span><b>我的设计档案袋</b><small>PERSONAL STYLE ARCHIVE</small></span>
+      </a>
+      <label class="search-wrap">
+        <span aria-hidden="true">⌕</span>
+        <input id="searchInput" type="search" placeholder="搜索风格、标签或用途…" autocomplete="off" />
+        <kbd>⌘ K</kbd>
+      </label>
+      <button class="stamp-button" id="randomButton" type="button">随机抽卡</button>
+    </header>
+
+    <main class="workspace" id="top">
+      <aside class="file-rail" aria-label="素材分类">
+        <div class="rail-label">INDEX / 目录</div>
+        <nav id="categoryNav"></nav>
+        <div class="rail-note">
+          <span>ARCHIVE NOTE</span>
+          点击卡片查看完整元素；点击“放入灵感板”完成本次选择。
+        </div>
+      </aside>
+
+      <section class="archive-desk" aria-labelledby="archiveTitle">
+        <div class="folder-head">
+          <div class="folder-tab">CASE NO. 0926</div>
+          <div class="folder-title">
+            <div>
+              <p class="eyebrow">VISUAL MATERIAL LIBRARY</p>
+              <h1 id="archiveTitle">风格素材总档案</h1>
+            </div>
+            <div class="archive-stats" aria-label="素材库统计">
+              <span><b id="resultCount">23</b> 个风格</span>
+              <span><b>08</b> 套字体</span>
+              <span><b>05</b> 份提示词</span>
+            </div>
+          </div>
+          <div class="folder-meta">
+            <span>归档日期：2026.09.26</span>
+            <span>整理状态：已分类</span>
+            <span id="activeLabel">当前：全部素材</span>
+          </div>
+        </div>
+
+        <div class="desk-toolbar">
+          <div class="view-copy">
+            <strong id="viewTitle">全部素材</strong>
+            <span id="viewDescription">从工作台、网站方向到微交互，按图片快速挑选。</span>
+          </div>
+          <div class="sort-badge">按入库顺序 · NEWEST</div>
+        </div>
+
+        <div class="empty-state" id="emptyState" hidden>
+          <span>NO MATCH</span>
+          <h2>这只档案袋里还没有对应素材</h2>
+          <button type="button" id="clearSearch">清除搜索</button>
+        </div>
+        <div class="library-grid" id="libraryGrid" aria-live="polite"></div>
+      </section>
+
+      <aside class="selection-board" aria-labelledby="selectionTitle">
+        <div class="tape" aria-hidden="true"></div>
+        <p class="eyebrow">CURRENT MOODBOARD</p>
+        <h2 id="selectionTitle">本次灵感板</h2>
+        <p class="board-hint">最多放入 4 张卡，方便并排比较。</p>
+        <div class="selected-list" id="selectedList"></div>
+        <div class="board-empty" id="boardEmpty">
+          <span>＋</span>
+          从中间挑选喜欢的风格
+        </div>
+        <button class="clear-board" id="clearBoard" type="button" disabled>清空灵感板</button>
+        <div class="pencil-note">试着组合：<br />1 个结构 + 1 个动效 + 1 套字体</div>
+      </aside>
+    </main>
+
+    <dialog class="detail-dialog" id="detailDialog">
+      <button class="dialog-close" id="dialogClose" type="button" aria-label="关闭详情">×</button>
+      <div class="detail-visual">
+        <img id="detailImage" alt="" />
+        <span class="detail-number" id="detailNumber"></span>
+      </div>
+      <div class="detail-copy">
+        <p class="eyebrow" id="detailCategory"></p>
+        <h2 id="detailTitle"></h2>
+        <p class="detail-summary" id="detailSummary"></p>
+        <div class="detail-tags" id="detailTags"></div>
+        <dl class="detail-specs">
+          <div><dt>适合</dt><dd id="detailUse"></dd></div>
+          <div><dt>可提取</dt><dd id="detailElements"></dd></div>
+          <div><dt>动效</dt><dd id="detailMotion"></dd></div>
+        </dl>
+        <div class="swatches" id="detailSwatches" aria-label="风格色票"></div>
+        <button class="select-detail" id="selectDetail" type="button">放入本次灵感板</button>
+      </div>
+    </dialog>
+
+    <template id="cardTemplate">
+      <article class="material-card">
+        <button class="card-open" type="button">
+          <span class="card-tab"></span>
+          <span class="paperclip" aria-hidden="true"></span>
+          <span class="image-wrap"><img alt="" /><i class="motion-mark">MOTION</i></span>
+          <span class="card-index"></span>
+          <span class="card-title"></span>
+          <span class="card-summary"></span>
+          <span class="card-tags"></span>
+        </button>
+        <button class="card-select" type="button">＋ 放入灵感板</button>
+      </article>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
