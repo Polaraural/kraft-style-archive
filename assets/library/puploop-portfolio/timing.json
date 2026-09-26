@@ -1,0 +1,21 @@
+{
+  "source": "assets/original.mp4",
+  "duration_seconds": 34.667,
+  "resolution": [
+    1152,
+    720
+  ],
+  "sampled_keyframes_seconds": [
+    0.0,
+    3.0,
+    7.0,
+    11.0,
+    16.0,
+    21.0,
+    26.0,
+    31.0,
+    33.7
+  ],
+  "sampling_note": "代表性抽样覆盖片头、包装/档案展示、作品页切换、周边叠入和结尾回到封面；未逐帧分析。",
+  "audio_reviewed": false
+}

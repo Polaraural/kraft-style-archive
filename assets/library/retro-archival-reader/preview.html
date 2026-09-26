@@ -1,0 +1,480 @@
+<html lang="en" vid="0"><head vid="1">
+<meta charset="UTF-8" vid="2">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
+<title vid="4">Archival Reader</title>
+
+
+
+
+<style vid="8">
+    :root {
+        --bg-paper: #e4e2d7;
+        --ink: #161616;
+        --ink-light: #8a8a85;
+        --desk: #0a0a0a;
+        --font-mono: 'Space Mono', monospace;
+        --font-display: 'VT323', monospace;
+        --border-style: 1px dotted var(--ink);
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    body {
+        background-color: var(--desk);
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: var(--font-mono);
+        color: var(--ink);
+    }
+
+    
+    .book-container {
+        width: 100%;
+        height: 100%;
+        max-width: 600px;
+        perspective: 2500px; 
+        position: relative;
+        padding: 20px 10px 20px 0; 
+    }
+
+    .book {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+    }
+
+    .page {
+        position: absolute;
+        top: 0;
+        left: 20px; 
+        width: calc(100% - 20px);
+        height: 100%;
+        transform-origin: left center;
+        transform-style: preserve-3d;
+        transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        cursor: grab;
+    }
+
+    .page:active {
+        cursor: grabbing;
+    }
+
+    .page.flipped {
+        transform: rotateY(-180deg);
+    }
+
+    .page-front, .page-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        background-color: var(--bg-paper);
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1), inset -10px 0 20px rgba(0,0,0,0.03);
+        display: flex;
+        overflow: hidden;
+    }
+
+    
+    .page-back {
+        transform: rotateY(180deg);
+        background-color: #dcdad0;
+        box-shadow: inset 10px 0 20px rgba(0,0,0,0.05);
+    }
+
+    
+    .page-front::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0.2));
+        opacity: 0;
+        transition: opacity 0.8s;
+        pointer-events: none;
+    }
+    .page.flipped .page-front::after {
+        opacity: 1;
+    }
+
+    
+    .perforation-edge {
+        width: 32px;
+        height: 100%;
+        border-right: var(--border-style);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        background: var(--bg-paper);
+        z-index: 2;
+    }
+
+    .hole {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: var(--desk); 
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.8);
+    }
+
+    .page-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+        position: relative;
+    }
+
+    
+    .pagination {
+        position: absolute;
+        right: -8px;
+        top: 50%;
+        transform: translateY(-50%) rotate(90deg);
+        font-family: var(--font-display);
+        font-size: 1.2rem;
+        letter-spacing: 0.3em;
+        color: var(--ink);
+    }
+
+    
+    .grid-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-bottom: var(--border-style);
+        padding-bottom: 12px;
+        margin-bottom: 12px;
+    }
+
+    .grid-header .title-block {
+        grid-column: span 2;
+        text-align: center;
+        font-family: var(--font-display);
+        font-size: 2.2rem;
+        letter-spacing: 0.15em;
+        border-bottom: var(--border-style);
+        padding-bottom: 8px;
+        margin-bottom: 8px;
+    }
+
+    .meta-col {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+    }
+    .meta-col.right {
+        text-align: right;
+    }
+
+    .main-body {
+        flex: 1;
+        font-size: 0.8rem;
+        line-height: 1.4;
+        text-align: justify;
+        text-justify: inter-word;
+        hyphens: auto;
+        column-count: 2;
+        column-gap: 16px;
+        column-rule: var(--border-style);
+        overflow: hidden;
+    }
+
+    .main-body p {
+        margin-bottom: 1em;
+    }
+
+    .footer-block {
+        border-top: var(--border-style);
+        padding-top: 12px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: end;
+        gap: 16px;
+    }
+
+    .faded-text {
+        color: var(--ink-light);
+        font-size: 0.6rem;
+        line-height: 1.2;
+        text-transform: uppercase;
+    }
+
+    
+    .barcode {
+        height: 30px;
+        width: 120px;
+        background: repeating-linear-gradient(
+            to right,
+            var(--ink),
+            var(--ink) 2px,
+            transparent 2px,
+            transparent 4px,
+            var(--ink) 4px,
+            var(--ink) 5px,
+            transparent 5px,
+            transparent 7px,
+            var(--ink) 7px,
+            var(--ink) 10px,
+            transparent 10px,
+            transparent 11px
+        );
+    }
+
+    
+    .p1-layout { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;}
+    .big-title { font-family: var(--font-display); font-size: 4rem; letter-spacing: 0.2em; line-height: 0.9; margin-bottom: 20px;}
+    .sys-code { border: var(--border-style); padding: 4px 8px; display: inline-block; margin-top: 20px; font-size: 0.8rem;}
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.7rem;
+        margin-top: 10px;
+    }
+    .data-table th, .data-table td {
+        border-bottom: var(--border-style);
+        padding: 4px 0;
+        text-align: left;
+        text-transform: uppercase;
+    }
+    .data-table th { color: var(--ink-light); font-weight: normal;}
+
+    
+    .hint {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: var(--ink-light);
+        font-family: var(--font-display);
+        font-size: 1.2rem;
+        letter-spacing: 0.1em;
+        animation: pulse 2s infinite;
+        pointer-events: none;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 1; }
+    }
+</style>
+<link rel="stylesheet" href="fonts.css"></head>
+<body vid="9">
+
+<div class="book-container" vid="10">
+    <div class="book" id="book" vid="11">
+        
+        
+        <div class="page" id="page3" vid="12">
+            <div class="page-back" vid="13"></div>
+            <div class="page-front" vid="14">
+                <div class="perforation-edge" vid="15">
+                    <div class="hole" vid="16"></div><div class="hole" vid="17"></div><div class="hole" vid="18"></div>
+                    <div class="hole" vid="19"></div><div class="hole" vid="20"></div><div class="hole" vid="21"></div>
+                    <div class="hole" vid="22"></div><div class="hole" vid="23"></div><div class="hole" vid="24"></div>
+                </div>
+                <div class="page-content" vid="25">
+                    <div class="pagination" vid="26">3 / 3</div>
+                    <header class="grid-header" vid="27">
+                        <div class="meta-col" vid="28">
+                            <span vid="29">AUTHORIZATION: REQUIRED</span>
+                            <span vid="30">LEVEL: OMICRON</span>
+                        </div>
+                        <div class="meta-col right" vid="31">
+                            <span vid="32">DATETIME: 2024.11.08</span>
+                            <span vid="33">SYS_CLK: 14:99:02</span>
+                        </div>
+                    </header>
+                    <div class="main-body" style="column-count: 1;" vid="34">
+                        <p vid="35">SYSTEM DIAGNOSTIC LOG. HARDWARE INTERFACE NOMINAL. MEMORY BANKS SECTOR 4 SHOW MINOR CORRUPTION, AUTOMATED DEFRAG INITIATED. ENVIRONMENTAL CONTROLS LOCKED TO OVERRIDE.</p>
+                        <table class="data-table" vid="36">
+                            <tbody vid="37"><tr vid="38"><th vid="39">Process</th><th vid="40">PID</th><th vid="41">Status</th><th vid="42">Mem Allocation</th></tr>
+                            <tr vid="43"><td vid="44">ARCHIVE_CORE</td><td vid="45">001</td><td vid="46">RUNNING</td><td vid="47">4096 TB</td></tr>
+                            <tr vid="48"><td vid="49">NEURAL_LINK</td><td vid="50">089</td><td vid="51">STANDBY</td><td vid="52">--</td></tr>
+                            <tr vid="53"><td vid="54">SECTOR_SCAN</td><td vid="55">114</td><td vid="56">FAULT</td><td vid="57">ERR_CODE_9X</td></tr>
+                            <tr vid="58"><td vid="59">LIFE_SUPPORT</td><td vid="60">002</td><td vid="61">OPTIMAL</td><td vid="62">128 GB</td></tr>
+                        </tbody></table>
+                        <br vid="63">
+                        <p style="color: var(--ink-light); text-align: center;" vid="64">[ END OF LOG ]</p>
+                    </div>
+                    <div class="footer-block" vid="65">
+                        <div class="faded-text" vid="66">
+                            UNAUTHORIZED DUPLICATION OF THIS RECORD IS SUBJECT TO SEVERE PENALTY.<br vid="67">
+                            BUREAU OF TEMPORAL ARCHIVES © 2142.
+                        </div>
+                        <div class="barcode" vid="68"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="page" id="page2" vid="69">
+            <div class="page-back" vid="70"></div>
+            <div class="page-front" vid="71">
+                <div class="perforation-edge" vid="72">
+                    <div class="hole" vid="73"></div><div class="hole" vid="74"></div><div class="hole" vid="75"></div>
+                    <div class="hole" vid="76"></div><div class="hole" vid="77"></div><div class="hole" vid="78"></div>
+                    <div class="hole" vid="79"></div><div class="hole" vid="80"></div><div class="hole" vid="81"></div>
+                </div>
+                <div class="page-content" vid="82">
+                    <div class="pagination" vid="83">2 / 3</div>
+                    <header class="grid-header" vid="84">
+                        <div class="title-block" vid="85">MANIFESTO : SUB_SECT 9</div>
+                        <div class="meta-col" vid="86">
+                            <span vid="87">REF: TX-8891-B</span>
+                            <span vid="88">ORIGIN: TERMINAL 4</span>
+                        </div>
+                        <div class="meta-col right" vid="89">
+                            <span vid="90">STATUS: DECRYPTED</span>
+                            <span vid="91">CLASS: RESTRICTED</span>
+                        </div>
+                    </header>
+                    <div class="main-body" vid="92">
+                        <p vid="93">The imperative of the Archive is not preservation, but isolation. Information unchecked inevitably seeks network propagation. We construct these physical barriers—paper, magnetic tape, closed circuits—not out of nostalgia, but necessity.</p>
+                        <p vid="94">By forcing data into sequential, mechanical substrates, we strip it of its volatility. A record etched onto continuous stationery cannot execute a subroutine. It cannot ping an external server.</p>
+                        <p vid="95">We rely on the rigidity of the grid. The alignment of the dot-matrix strike. Every character must occupy its precise designated coordinate. Any deviation indicates structural compromise of the underlying data structure. Do not trust fluid interfaces. Trust the impact of physical type.</p>
+                    </div>
+                    <div class="footer-block" vid="96">
+                        <div class="faded-text" vid="97">
+                            PRINT SEQUENCE 04491-A<br vid="98">
+                            OPERATOR: J. DOE // SHIFT 3
+                        </div>
+                        <div class="barcode" vid="99"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="page" id="page1" vid="100">
+            <div class="page-back" vid="101"></div>
+            <div class="page-front" vid="102">
+                <div class="perforation-edge" vid="103">
+                    <div class="hole" vid="104"></div><div class="hole" vid="105"></div><div class="hole" vid="106"></div>
+                    <div class="hole" vid="107"></div><div class="hole" vid="108"></div><div class="hole" vid="109"></div>
+                    <div class="hole" vid="110"></div><div class="hole" vid="111"></div><div class="hole" vid="112"></div>
+                </div>
+                <div class="page-content p1-layout" vid="113">
+                    <div class="pagination" vid="114">1 / 3</div>
+                    <div style="width: 100%; border-bottom: var(--border-style); padding-bottom: 20px; margin-bottom: 20px;" vid="115">
+                        <span style="font-family: var(--font-display); font-size: 1.5rem; letter-spacing: 0.1em;" vid="116">BUREAU OF TEMPORAL ARCHIVES</span>
+                    </div>
+                    
+                    <div class="big-title" vid="117">SYSTEM<br vid="118">PROTOCOL<br vid="119">VOL. IX</div>
+                    
+                    <div style="font-size: 0.8rem; margin-bottom: 40px; color: var(--ink-light);" vid="120">
+                        HARDCOPY EXPORT<br vid="121">
+                        CONTINUOUS FEED ALIGNMENT: OK
+                    </div>
+
+                    <div class="barcode" style="width: 200px; height: 40px;" vid="122"></div>
+                    <div class="sys-code" vid="123">INDEX: 000-000-001</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="hint" id="hint" vid="124">SWIPE LEFT ←</div>
+</div>
+
+<script vid="125">
+    document.addEventListener('DOMContentLoaded', () => {
+        const pages = document.querySelectorAll('.page');
+        const hint = document.getElementById('hint');
+        let currentPage = 0;
+
+        
+        pages.forEach((page, index) => {
+            page.style.zIndex = pages.length - index;
+        });
+
+        function turnNext() {
+            if (currentPage < pages.length - 1) {
+                pages[currentPage].classList.add('flipped');
+                currentPage++;
+                updateHint();
+            }
+        }
+
+        function turnPrev() {
+            if (currentPage > 0) {
+                currentPage--;
+                pages[currentPage].classList.remove('flipped');
+                updateHint();
+            }
+        }
+
+        function updateHint() {
+            if (currentPage === 0) {
+                hint.innerHTML = 'SWIPE LEFT ←';
+                hint.style.opacity = '';
+            } else if (currentPage === pages.length - 1) {
+                hint.innerHTML = '→ SWIPE RIGHT';
+                hint.style.opacity = '';
+            } else {
+                hint.style.opacity = '0'; 
+            }
+        }
+
+        
+        let touchstartX = 0;
+        let touchendX = 0;
+
+        const container = document.querySelector('.book-container');
+
+        container.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        container.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            handleGesture();
+        }, {passive: true});
+
+        function handleGesture() {
+            const threshold = 50; 
+            if (touchstartX - touchendX > threshold) {
+                turnNext();
+            }
+            if (touchendX - touchstartX > threshold) {
+                turnPrev();
+            }
+        }
+
+        
+        let isDragging = false;
+        let startX = 0;
+
+        container.addEventListener('mousedown', e => {
+            isDragging = true;
+            startX = e.pageX;
+        });
+
+        window.addEventListener('mouseup', e => {
+            if (!isDragging) return;
+            isDragging = false;
+            let endX = e.pageX;
+            const threshold = 50;
+            if (startX - endX > threshold) turnNext();
+            if (endX - startX > threshold) turnPrev();
+        });
+    });
+</script>
+
+
+</body></html>

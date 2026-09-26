@@ -2,27 +2,27 @@ const materials = [
   {
     id: "blue-journal", title: "蓝白手账", category: "personal", categoryLabel: "个人风格", image: "./assets/covers/blue-journal.png",
     summary: "方格纸、蓝墨水与轻盈纸片，把记录做成可见的日常。", tags: ["手账", "蓝白", "中文"],
-    use: "日记、习惯养成、阅读记录", elements: "点阵纸、蓝色墨迹、胶带、圆润标题、手写批注", motion: "纸片轻移、勾选反馈、分页滑动", colors: ["#2A5BA7", "#E8F0FE", "#F0F4F8", "#FFFFFF"], isMotion: true
+    use: "日记、习惯养成、阅读记录", elements: "点阵纸、蓝色墨迹、胶带、圆润标题、手写批注", motion: "14 层立体薄片持续旋转（Three.js）", colors: ["#2A5BA7", "#E8F0FE", "#F0F4F8", "#FFFFFF"], isMotion: true
   },
   {
     id: "puploop", title: "PupLoop 纸质档案袋", category: "personal", categoryLabel: "个人风格", image: "./assets/covers/puploop.jpg",
     summary: "牛皮纸文件袋、黑白作品卡和荧光贴纸组成的实体作品档案。", tags: ["牛皮纸", "作品集", "贴纸"],
-    use: "作品集、素材库、创意工作台", elements: "档案袋、纸质卡片、回形针、编号章、荧光标签", motion: "抽卡、开袋、叠放、轻微倾斜", colors: ["#B9824D", "#171512", "#F3EBDD", "#F4DA42", "#E84B38"], isMotion: true
+    use: "作品集、素材库、创意工作台", elements: "档案袋、纸质卡片、回形针、编号章、荧光标签", motion: "抽卡、开袋、层叠切换、周边叠入（按原片时间轴）", colors: ["#B9824D", "#171512", "#F3EBDD", "#F4DA42", "#E84B38"], isMotion: true
   },
   {
     id: "peg", title: "Peg 中文极简", category: "personal", categoryLabel: "个人风格", image: "./assets/covers/peg.png",
     summary: "暖白纸面、翡翠绿强调和为中文单独调整的排版系统。", tags: ["极简", "中文", "设计令牌"],
-    use: "知识库、文档、中文产品界面", elements: "暖白底、黑色文字、单一绿色强调、舒展行距", motion: "淡入、短距离推入、逐字弹入", colors: ["#FAFAF8", "#16181D", "#00A878", "#8A8A8E"], isMotion: true
+    use: "知识库、文档、中文产品界面", elements: "暖白底、黑色文字、单一绿色强调、舒展行距", motion: "逐字弹入、内容推入、线条描绘", colors: ["#FAFAF8", "#16181D", "#00A878", "#8A8A8E"], isMotion: true
   },
   {
     id: "retro", title: "复古档案册", category: "personal", categoryLabel: "个人风格", image: "./assets/covers/retro.png",
     summary: "打印纸、等宽文字、编号与翻页，像被保存多年的研究档案。", tags: ["复古", "档案", "等宽"],
-    use: "研究资料、展览、品牌故事", elements: "连续打印纸、打字机文字、页码、装订孔", motion: "3D 翻页、纸张展开、逐行打印", colors: ["#D9D0BE", "#28241F", "#857866", "#B54B34"], isMotion: true
+    use: "研究资料、展览、品牌故事", elements: "连续打印纸、打字机文字、页码、装订孔", motion: "沿左侧轴 3D 翻页（perspective 2500px / 0.8s）", colors: ["#D9D0BE", "#28241F", "#857866", "#B54B34"], isMotion: true
   },
   {
     id: "variant", title: "深色创作工作台", category: "personal", categoryLabel: "个人风格", image: "./assets/covers/variant.svg",
     summary: "黑色画布、窄图标栏和悬浮输入框构成的沉浸式创作空间。", tags: ["深色", "工作台", "工具"],
-    use: "AI 创作、内容生成、社区浏览", elements: "窄侧栏、黑色画布、悬浮输入框、低对比元信息", motion: "面板淡入、输入框聚焦、卡片浮起", colors: ["#080808", "#1C1C1C", "#E8E8E8", "#757575"], isMotion: true
+    use: "AI 创作、内容生成、社区浏览", elements: "52px 窄侧栏、黑色画布、12px 圆角悬浮输入框、低对比元信息", motion: "静态结构已确认，源码中无动效实现", colors: ["#080808", "#1C1C1C", "#E8E8E8", "#757575"], isMotion: true
   },
   {
     id: "xiaohongshu", title: "小红书参考 · 待补图", category: "personal", categoryLabel: "个人风格", image: "./assets/covers/xiaohongshu.png",
@@ -125,136 +125,267 @@ const categories = [
   { id: "special", label: "特殊界面", color: "#8353a8", description: "地图、折射玻璃和特殊技术能力。" }
 ];
 
-// 每个素材的可复制提示词：个人风格为手工拆解，其余按字段自动生成。
+// 每个素材的可复制提示词。
+// 个人风格部分逐条对照本地素材库（风格素材库/styles/<id>/）的证据写成，不使用推测参数。
 const prompts = {
   "blue-journal": `复现一套「蓝白手账」风格的界面。
 
-配色：点阵方格纸底 #E8F0FE / #F0F4F8，墨水蓝主色 #2A5BA7，正文深灰蓝，纸面留白 #FFFFFF。
-版式：像摊开的纸质手账——圆润的中文标题、手写体批注、胶带贴纸、回形针和页码标签；网格用 12px 点阵。
-中文排版：思源黑体 / Noto Sans SC，标题字重 700，正文 15px / 行高 1.8，字距 0.01em。
-动效：
-1) 便签纸片从下方 14px 处以 260ms cubic-bezier(.2,.85,.28,1) 滑入并回正 1.5° 倾斜；
-2) 勾选框逐条打勾，用 scale 从 0 到 1 的描边动画，每条间隔 180ms；
-3) 切换页面时整页向下平移 8px 并淡出，像翻过一页纸。
-交互反馈保持轻、软、慢，不使用弹跳或强对比位移。`,
+配色：点阵方格纸 #E8F0FE、桌面 #F0F4F8，墨水蓝 #2A5BA7，纸面 #FFFFFF。
+画框：440 × 880，圆角 40px；日记内边距 32px，背景网格 20px。
+字体：标题与日期用 Quicksand（14 / 12px），连续天数 Quicksand 32px / 600，日记正文用 Gaegu 20px / 行高 1.6。
+主视觉：用 Three.js 堆叠 14 层立体薄片，几何体 BoxGeometry(3, 0.05, 3)；每层 MeshPhongMaterial 取蓝色、透明度按 0.7 − i × 0.03 逐层递减，并叠加白色 EdgesGeometry 描边。
+动效：每帧执行 group.rotation.y += 0.005，让薄片持续缓慢自转；每层保留静态倾角 rotation.y = sin(i × 0.5) × 0.1。
+相机与灯光：PerspectiveCamera(45, aspect, 0.1, 1000)，位置 (5, 5, 8)，lookAt(0, planeCount × 0.07, 0)；DirectionalLight(0xffffff, 1) 位于 (5, 10, 7.5)，另加 AmbientLight(0xffffff, 0.6)。
+以上参数全部来自原版源码，请照抄数值，不要自行加快转速或加入弹跳。`,
 
-  "puploop": `复现「牛皮纸档案袋」风格的作品集界面。
+  "puploop": `复现「牛皮纸档案袋」风格的作品集展示。
 
-配色：牛皮纸 #B9824D、近黑 #171512、米白 #F3EBDD，点缀荧光黄 #F4DA42 与印章红 #E84B38。
-结构：牛皮纸文件袋 + 黑白作品卡 + 回形针 + 编号章 + 荧光贴纸。
-材质：纸张噪点、轻微折痕、柔和投影，不要发光。
-动效：
-1) 卡片从档案袋口向上抽出 40px，时长 300ms，缓动 cubic-bezier(.2,.85,.28,1)；
-2) 抽出过程中先倾斜 -3° 再回正，多张卡片依次叠放，每张延迟 90ms；
-3) 悬停时整张卡抬升 6px 并加深投影。`,
+配色：牛皮纸浅棕、暖白档案页、黑色作品卡为基础，亮红贴纸做焦点，荧光黄 / 草绿 / 亮蓝作小面积点缀（色值为画面估值）。
+材质：纸张噪点、纸边、圆角与柔和纸张阴影。
+信息设计：大号黑体品牌字、中文标题、双语字段、登记表格、档案编号、条码与标签；回形针、贴纸、手写口号、小涂鸦围绕主内容分布，不填满留白。
+构图：作品与档案居中放大，白色背景留出呼吸空间。
+
+动效：按素材库 34.7s 原片的时间轴还原。原片没有动效源码，时间曲线无法从视频还原，需要自行设定并在交付时标注。
+0s 档案袋封面与角落涂鸦 → 3s 封面微缩并出现交互光标 → 7s 转到档案袋背面与标签 → 11s 抽出档案页 → 16s 设计师档案与作品卡展开 → 21s 周边商品叠入档案上层 → 26s 作品卡切换为蓝色界面 → 31s 回到档案袋封面。
+手法限定为轻微缩放、上浮、错层入场和短促的卡片替换，不要加入原片没有的旋转或弹性回弹。`,
 
   "peg": `复现「Peg 中文极简」设计系统。
 
-配色：暖白底 #FAFAF8，正文近黑 #16181D，单一强调色翡翠绿 #00A878，次级文字 #8A8A8E。
-中文排版：Noto Sans SC / 思源黑体，正文 16px、行高 1.75、字距 0.01em；标题字重 700；正文段落宽度控制在 34 个汉字以内。
-约束：只允许一个强调色，强调只出现在链接、选中态和 2px 指示条上；不使用阴影和渐变。
-动效：
-1) 内容以 200ms 淡入 + 向上 8px 推入，缓动 cubic-bezier(.2,.8,.3,1)；
-2) 标题逐字弹入，每字延迟 28ms，位移 6px；
-3) 强调色指示条从左侧 0 宽度生长到 100%，时长 320ms。
-禁止使用缩放和旋转。`,
+配色：暖白底 #FAFAF8，正文近黑 #16181D，唯一强调色翡翠绿 #00A878，次级文字 #8A8A8E。
+中文排版：中文用 Noto Sans SC、拉丁字符用 Inter；正文 16px / 行高 1.75 / 字距 0.01em；标题字重 700；正文段落宽度控制在 34 个汉字以内。不要把拉丁文的负字距策略直接套到中文上。
+约束：系统刻意扁平，默认不使用阴影；强调只来自缩放、字重与留白；分隔线 2px 近黑；强调点直径 10px 翡翠绿。
 
-  "retro": `复现「复古档案册」风格的研究档案界面。
+动效令牌（数值照抄素材库 assets/tokens/effects.css）：
+--ease-reveal: cubic-bezier(0.2, 0.65, 0.2, 1)
+--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1)
+--dur-fast: 200ms ／ --dur-normal: 400ms ／ --dur-slow: 820ms ／ --dur-draw: 1400ms
+--enter-y: 22px（入场位移）
+逐字弹入：缓动用 --ease-spring，字间延迟拉丁 36ms、中文 48ms。
+内容推入：从 --enter-y 的 22px 位移到 0，缓动 --ease-reveal，时长 --dur-normal。
+线条描绘：时长 --dur-draw，从 scaleX(0) 生长到 1。
+必须遵循 prefers-reduced-motion。`,
 
-配色：底色 #D9D0BE，正文 #28241F，辅助 #857866，印章红 #B54B34。
-版式：模拟连续打印纸——等宽字体、装订孔、页码、打字机对齐的编号与虚线分隔。
-字体：中文用 Noto Sans SC，编号与英文用 Space Mono。
-动效：
-1) 文字逐行打印，每行间隔 180ms，行尾保留闪烁光标；
-2) 翻页使用 perspective 900px 的 3D 翻页，rotateY 从 0 到 -95°，时长 480ms，翻动时纸张阴影加深；
-3) 印章落下时从 1.4 倍缩放到 1 倍并轻微旋转 -6°，时长 220ms。`,
+  "retro": `复现「复古档案册」风格的阅读器界面。
 
-  "variant": `复现「深色创作工作台」界面。
+配色：纸张 #e4e2d7，背页 #dcdad0，墨色 #161616，次要文字 #8a8a85，桌面 #0a0a0a。
+版式：最大书宽 600px；左侧装订边 32px、圆孔直径 12px，模拟连续打印纸；内容内边距 16px，正文双栏、栏间距 16px、点状分栏线；边框用 1px dotted 近黑。
+字体：正文与元数据用 Space Mono，标题与页码用 VT323。
+翻页交互：容器 perspective: 2500px；页面 transform-origin: left center；transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)；翻页态 transform: rotateY(-180deg)，同时页面正面的渐变阴影从 opacity 0 过渡到 1，时长同为 0.8s。鼠标拖拽或触屏滑动位移超过 50px 触发翻页。
+保留装饰性的 CSS 条形码。原件禁用了文字选择与缩放，用于真实阅读器时应开放选择、缩放与键盘翻页。`,
 
-配色：画布 #080808，面板 #1C1C1C，主文字 #E8E8E8，次级 #757575，分隔线 #2A2A2A（1px）。
-结构：左侧 56px 窄图标栏 + 中央无限画布 + 底部悬浮输入框。
-动效：
-1) 侧栏图标依次淡入，每个延迟 40ms；
-2) 输入框聚焦时边框从 #2A2A2A 过渡到 #E8E8E8，时长 180ms，光标闪烁；
-3) 生成结果卡片以 12px 上浮 + 淡入出现，投影扩散但不发光。
-整体保持低对比、无彩色、无发光。`,
+  "variant": `复现「Variant 社区」深色创作工作台的静态结构。
+
+已确认的静态设计：
+底色纯黑 #000000，图标为白色；左侧窄侧栏宽 52px，图标按钮 28px、圆角 6px；顶部标题栏高 52px，字号 13px、字重 500、白色 50% 透明度；底部创作输入框圆角 12px、黑色 75% 透明度、背景模糊 25px；输入框内包含 Add image / Select style 控件与 Auto / Public 选项，提交按钮为默认禁用态。
+字体：标题声明使用 Inter；全局另声明 Variant Neue Display / Variant Neue Text，但品牌字体许可未确认，不要当作可分发字体资产。
+
+动效：素材库只确认了静态结构，源码中没有可读取的动效实现，社区地址还会跳转到登录页。因此不要凭空添加动效；如果确实需要交互反馈，自行定义并明确标注为自定，优先选择输入框聚焦时的边框与背景模糊过渡这类不改变结构的最小反馈。`,
 
   "xiaohongshu": `这条素材目前只有来源记录，还没有取得可验证的帖子画面，暂时不要用它做风格参考。
 
 建议：等补上真实截图后再拆解配色、版式与动效；在此之前不要推测它的具体视觉元素。`
 };
 
-// 动效演示：用真实 CSS 动画还原该风格的动效，仅个人风格已拆解。
-const motionDemos = {
+// 动效演示：优先直接呈现素材库里的原件，不做自创演绎。
+// embed = 原版 HTML（同源 iframe），video = 原片，tokens = 按库里动效令牌复现。
+const motionAssets = {
   "blue-journal": {
-    motion: "纸片轻移 · 勾选反馈 · 纸页下移",
-    steps: ["便签纸片滑入并回正", "勾选项逐条打勾", "纸页向下滑动翻过"],
-    html: `<div class="demo demo-journal">
-      <div class="dj-paper"><span class="dj-punch"></span><span class="dj-punch"></span><span class="dj-punch"></span>
-        <div class="dj-head">14 Days</div><div class="dj-rule"></div><div class="dj-rule"></div><div class="dj-rule short"></div>
-      </div>
-      <div class="dj-tasks">
-        <div class="dj-task" style="--n:0"><i></i><b>整理今日灵感</b></div>
-        <div class="dj-task" style="--n:1"><i></i><b>记录阅读笔记</b></div>
-        <div class="dj-task" style="--n:2"><i></i><b>收进档案袋</b></div>
-      </div>
-      <div class="dj-pages"><i></i><i></i><i></i></div>
-      <div class="dj-slip">NEW NOTE</div>
-    </div>`
+    kind: "embed",
+    src: "./assets/library/blue-stationery-journal/preview.html",
+    ratio: "3 / 4",
+    design: [480, 920],
+    source: "素材库原件 · preview.html",
+    motion: "14 层立体薄片持续旋转",
+    steps: [
+      "Three.js 每帧 group.rotation.y += 0.005",
+      "14 层 BoxGeometry(3, 0.05, 3)，透明度 0.7 − i × 0.03 逐层递减",
+      "每层 rotation.y = sin(i × 0.5) × 0.1，相机位于 (5, 5, 8)"
+    ],
+    note: "原版画框 440 × 880、圆角 40px；字体 Quicksand + Gaegu 已随库本地化。"
   },
   "puploop": {
-    motion: "抽卡 · 叠放 · 轻微倾斜",
-    steps: ["卡片从档案袋口抽出", "多张卡片依次叠放", "抽出时先倾斜再回正"],
-    html: `<div class="demo demo-puploop">
-      <div class="pl-cards">
-        <div class="pl-card" style="--n:2"><span>03</span></div>
-        <div class="pl-card" style="--n:1"><span>02</span></div>
-        <div class="pl-card" style="--n:0"><span>01</span></div>
-      </div>
-      <div class="pl-pocket"><div class="pl-pocket-lip"></div><span class="pl-label">PUP LOOP</span></div>
-      <div class="pl-sticker">★</div>
-    </div>`
+    kind: "video",
+    src: "./assets/library/puploop-portfolio/original.mp4",
+    poster: "./assets/library/puploop-portfolio/poster.jpg",
+    ratio: "16 / 10",
+    source: "素材库原件 · original.mp4",
+    motion: "抽卡 · 层叠切换 · 周边叠入",
+    steps: [
+      "0s 档案袋封面 → 3s 封面微缩并出现交互光标",
+      "7s 档案袋背面与标签 → 11s 抽出档案页 → 16s 作品卡展开",
+      "21s 周边叠入 → 26s 切换蓝色界面 → 31s 回到封面"
+    ],
+    note: "原视频 34.7s / 1152×720。库内没有动效源码，时间曲线无法从视频还原，所以这里直接播放原件。"
   },
   "peg": {
-    motion: "逐字弹入 · 内容推入 · 指示条生长",
-    steps: ["标题逐字弹入", "正文向上推入淡显", "绿色指示条从左生长"],
-    html: `<div class="demo demo-peg">
-      <div class="pg-title">${"简洁，但不冷淡。".split("").map((c,i)=>`<i style="--c:${i}">${c}</i>`).join("")}</div>
-      <div class="pg-lines">
-        <div class="pg-line" style="--n:0"></div>
-        <div class="pg-line" style="--n:1"></div>
-        <div class="pg-line short" style="--n:2"></div>
-      </div>
-      <div class="pg-bar"><i></i></div>
-      <div class="pg-dot"></div>
-    </div>`
+    kind: "tokens",
+    ratio: "5 / 4",
+    source: "素材库原件 · tokens/effects.css",
+    motion: "逐字弹入 · 内容推入 · 线条描绘",
+    steps: [
+      "逐字弹入：--ease-spring cubic-bezier(0.34, 1.56, 0.64, 1)，字间 48ms",
+      "内容推入：--enter-y 22px，--ease-reveal cubic-bezier(0.2, 0.65, 0.2, 1)，--dur-normal 400ms",
+      "线条描绘：--line-weight 2px；强调点 --peg-dot-size 10px 翡翠绿"
+    ],
+    note: "演示页引用的 peg-animate.js 未随库保存，这里按库里 effects.css 的动效令牌复现，数值与令牌一致。"
   },
   "retro": {
-    motion: "逐行打印 · 光标闪烁 · 印章落下",
-    steps: ["等宽文字逐行打印", "行尾光标闪烁", "印章从大到小落下"],
-    html: `<div class="demo demo-retro">
-      <div class="rt-paper">
-        <span class="rt-hole"></span><span class="rt-hole"></span><span class="rt-hole"></span>
-        <div class="rt-meta">ARCHIVE / 04 &nbsp; 1997</div>
-        <div class="rt-line" style="--n:0">记录，是让时间留下折痕。</div>
-        <div class="rt-line" style="--n:1">每条编号都对应一次研究。</div>
-        <div class="rt-line" style="--n:2">归档完成，等待复核。</div>
-        <div class="rt-caret"></div>
-      </div>
-      <div class="rt-stamp">已归档</div>
-    </div>`
-  },
-  "variant": {
-    motion: "面板淡入 · 输入框聚焦 · 卡片浮起",
-    steps: ["侧栏图标依次淡入", "输入框聚焦描边亮起", "结果卡片上浮出现"],
-    html: `<div class="demo demo-variant">
-      <div class="vr-rail"><i style="--n:0"></i><i style="--n:1"></i><i style="--n:2"></i><i style="--n:3"></i></div>
-      <div class="vr-card" style="--n:0; top: 20%"></div>
-      <div class="vr-card" style="--n:1; top: 42%"></div>
-      <div class="vr-input"><span>描述你想要的画面…</span><i class="vr-caret"></i></div>
-    </div>`
+    kind: "embed",
+    src: "./assets/library/retro-archival-reader/preview.html",
+    ratio: "4 / 5",
+    design: [620, 780],
+    autoFlip: true,
+    source: "素材库原件 · preview.html",
+    motion: "沿左侧轴 3D 翻页",
+    steps: [
+      "透视 perspective: 2500px，transform-origin: left center",
+      "transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)",
+      "翻页 rotateY(-180deg)，同时叠加 0 → 1 的渐变阴影；拖动或滑动超过 50px 触发"
+    ],
+    note: "原件支持左右拖动翻页；这里每 2.2 秒自动翻一页演示。"
   }
 };
+
+// Peg：按素材库动效令牌复现（数值全部取自 effects.css）
+const pegDemoHTML = `<div class="demo demo-peg">
+  <div class="pg-title">${"从稳定开始".split("").map((c, i) => `<i style="--c:${i}">${c}</i>`).join("")}</div>
+  <div class="pg-rule"><i></i></div>
+  <div class="pg-lines">
+    <div class="pg-line" style="--n:0"></div>
+    <div class="pg-line" style="--n:1"></div>
+    <div class="pg-line short" style="--n:2"></div>
+  </div>
+  <div class="pg-peg"></div>
+</div>`;
+
+let motionGeneration = 0;
+let activeVideo = null;
+let activeEmbed = null;
+
+function clearMotion() {
+  motionGeneration += 1;
+  if (activeVideo) { activeVideo.pause(); activeVideo = null; }
+  activeEmbed = null;
+}
+
+// 让原版页面按比例完整缩放进舞台
+function fitEmbed(asset) {
+  if (!activeEmbed || !asset || !asset.design) return;
+  const { frame, wrap } = activeEmbed;
+  const [dw, dh] = asset.design;
+  if (!wrap.clientWidth || !wrap.clientHeight) return;
+  const scale = Math.min(wrap.clientWidth / dw, wrap.clientHeight / dh);
+  frame.style.width = `${dw}px`;
+  frame.style.height = `${dh}px`;
+  frame.style.transform = `translate(-50%, -50%) scale(${scale})`;
+}
+
+// 复古档案册：驱动原件自身的 .flipped 类循环演示翻页
+function startAutoFlip(frame) {
+  const generation = motionGeneration;
+  const pages = () => {
+    try { return frame.contentDocument ? frame.contentDocument.querySelectorAll(".page") : []; }
+    catch (error) { return []; }
+  };
+  let index = 0;
+  const step = () => {
+    if (generation !== motionGeneration) return;
+    const list = pages();
+    if (!list.length) return;
+    if (index < list.length) {
+      list[index].classList.add("flipped");
+      index += 1;
+      setTimeout(step, 2200);
+    } else {
+      setTimeout(() => {
+        if (generation !== motionGeneration) return;
+        pages().forEach(page => page.classList.remove("flipped"));
+        index = 0;
+        setTimeout(step, 1200);
+      }, 1800);
+    }
+  };
+  setTimeout(step, 1600);
+}
+
+function renderMotion(item) {
+  clearMotion();
+  const asset = motionAssets[item.id];
+  els.motionStage.replaceChildren();
+  els.motionStage.style.aspectRatio = asset ? asset.ratio : "5 / 4";
+
+  if (!asset) {
+    els.motionCaption.innerHTML = '<p class="mc-empty">素材库里这条只有静态画面，没有可复现的动效原件；右侧的动效说明来自来源记录，不是实测结果。</p>';
+    return;
+  }
+
+  if (asset.kind === "embed") {
+    const wrap = document.createElement("div");
+    wrap.className = "asset-embed";
+    const frame = document.createElement("iframe");
+    frame.src = asset.src;
+    frame.title = `${item.title} 动效原件`;
+    frame.setAttribute("scrolling", "no");
+    wrap.append(frame);
+    els.motionStage.append(wrap);
+    activeEmbed = { frame, wrap };
+    frame.addEventListener("load", () => {
+      fitEmbed(asset);
+      if (asset.autoFlip) startAutoFlip(frame);
+    });
+    requestAnimationFrame(() => fitEmbed(asset));
+  } else if (asset.kind === "video") {
+    const wrap = document.createElement("div");
+    wrap.className = "asset-video";
+    const video = document.createElement("video");
+    video.src = asset.src;
+    if (asset.poster) video.poster = asset.poster;
+    video.controls = true;
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = "metadata";
+    wrap.append(video);
+    els.motionStage.append(wrap);
+    activeVideo = video;
+    video.play().catch(() => {});
+  } else if (asset.kind === "tokens") {
+    els.motionStage.innerHTML = pegDemoHTML;
+  }
+
+  const caption = document.createElement("div");
+  const source = document.createElement("p");
+  source.className = "mc-source";
+  source.textContent = asset.source;
+  const title = document.createElement("p");
+  title.className = "mc-motion";
+  title.textContent = asset.motion;
+  const list = document.createElement("ol");
+  asset.steps.forEach(step => {
+    const li = document.createElement("li");
+    li.textContent = step;
+    list.append(li);
+  });
+  const note = document.createElement("p");
+  note.className = "mc-note";
+  note.textContent = asset.note;
+  const actions = document.createElement("div");
+  actions.className = "mc-actions";
+  const replay = document.createElement("button");
+  replay.type = "button";
+  replay.className = "mc-replay";
+  replay.textContent = "↻ 重播动效";
+  replay.addEventListener("click", () => renderMotion(item));
+  const original = document.createElement("a");
+  original.className = "mc-original";
+  original.href = asset.src;
+  original.target = "_blank";
+  original.rel = "noopener";
+  original.textContent = "打开原件 ↗";
+  actions.append(replay, original);
+  caption.append(source, title, list, note, actions);
+  els.motionCaption.replaceChildren(caption);
+}
 
 function buildPrompt(item) {
   if (prompts[item.id]) return prompts[item.id];
@@ -407,7 +538,7 @@ function openDetail(item) {
   els.promptText.textContent = buildPrompt(item);
   resetCopyButton();
   renderMotion(item);
-  setVisualView(motionDemos[item.id] ? "motion" : "cover");
+  setVisualView(motionAssets[item.id] ? "motion" : "cover");
   updateDetailSelect();
   els.dialog.scrollTop = 0;
   if (!els.dialog.open) els.dialog.showModal();
@@ -415,52 +546,16 @@ function openDetail(item) {
 
 // 左侧视图：动效演示 / 原图封面
 function setVisualView(view) {
-  const hasDemo = Boolean(currentDetail && motionDemos[currentDetail.id]);
+  const hasDemo = Boolean(currentDetail && motionAssets[currentDetail.id]);
   const next = view === "motion" && hasDemo ? "motion" : "cover";
   els.visualBody.dataset.view = next;
-  els.motionCaption.classList.toggle("on", next === "motion");
+  els.motionCaption.classList.toggle("on", next === "motion" || !hasDemo);
   [...els.visualTabs.querySelectorAll("button")].forEach(button => {
     const selected = button.dataset.view === next;
     button.setAttribute("aria-selected", String(selected));
     button.disabled = button.dataset.view === "motion" && !hasDemo;
   });
-  if (next === "motion") replayMotion();
-}
-
-// 重建动效舞台，让 CSS 动画从头播放
-function replayMotion() {
-  const item = currentDetail;
-  if (!item) return;
-  const demo = motionDemos[item.id];
-  if (!demo) return;
-  els.motionStage.innerHTML = demo.html;
-}
-
-function renderMotion(item) {
-  const demo = motionDemos[item.id];
-  if (!demo) {
-    els.motionStage.replaceChildren();
-    els.motionCaption.innerHTML = '<p class="mc-empty">这条素材还没有拆解动效，可以先看原图封面，或参考右侧的动效说明。</p>';
-    return;
-  }
-  els.motionStage.innerHTML = demo.html;
-  const caption = document.createElement("div");
-  const title = document.createElement("p");
-  title.className = "mc-motion";
-  title.textContent = demo.motion;
-  const list = document.createElement("ol");
-  demo.steps.forEach(step => {
-    const li = document.createElement("li");
-    li.textContent = step;
-    list.append(li);
-  });
-  const replay = document.createElement("button");
-  replay.type = "button";
-  replay.className = "mc-replay";
-  replay.textContent = "↻ 重播动效";
-  replay.addEventListener("click", replayMotion);
-  caption.append(title, list, replay);
-  els.motionCaption.replaceChildren(caption);
+  if (next === "motion") fitEmbed(motionAssets[currentDetail.id] || {});
 }
 
 function resetCopyButton() {
@@ -517,6 +612,10 @@ els.clearSearch.addEventListener("click", () => { query = ""; els.search.value =
 els.random.addEventListener("click", () => { const items = visibleMaterials(); if (items.length) openDetail(items[Math.floor(Math.random() * items.length)]); });
 els.clearBoard.addEventListener("click", () => { selected.clear(); render(); });
 els.dialogClose.addEventListener("click", () => els.dialog.close());
+els.dialog.addEventListener("close", clearMotion);
+window.addEventListener("resize", () => {
+  if (currentDetail && motionAssets[currentDetail.id]) fitEmbed(motionAssets[currentDetail.id]);
+});
 els.dialog.addEventListener("click", event => { if (event.target === els.dialog) els.dialog.close(); });
 els.selectDetail.addEventListener("click", () => { if (currentDetail) toggleSelection(currentDetail.id); });
 els.copyPrompt.addEventListener("click", copyPrompt);
