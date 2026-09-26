@@ -391,7 +391,8 @@ function renderMotion(item) {
 let libraryData = null;
 let promptTargetValue = "";
 // 本地桥接：跑 work/library-bridge.py 后可直接写入素材库 prompts/ 目录。
-// 由桥接自己提供页面时用同源地址，否则回落到默认端口。
+// 只有页面本身由桥接提供时才启用直存：公网页面请求本机属于本地网络访问，
+// 浏览器会放行 GET 但拦掉带预检的 POST，所以公网上只保留「下载模板」。
 const LOCAL_HOST = ["127.0.0.1", "localhost", "::1"].includes(location.hostname);
 const BRIDGE_URL = LOCAL_HOST ? location.origin : "http://127.0.0.1:8788";
 let bridgeReady = false;
@@ -584,9 +585,15 @@ async function savePromptFile() {
 
 // 探测本地桥接，决定按钮是「保存到素材库」还是「下载模板」
 async function probeBridge() {
+  if (!LOCAL_HOST) {
+    bridgeReady = false;
+    setSaveButtonLabel("下载模板");
+    els.promptHint.textContent = "填上你要做的东西，提示词会自动带上这套风格的真实参数。下载的 .md 放进「风格素材库/prompts/」就是一条模板；想直接存进素材库，用本地地址打开 http://127.0.0.1:8788/。";
+    return;
+  }
   try {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 1200);
+    const timer = setTimeout(() => controller.abort(), 1500);
     const response = await fetch(`${BRIDGE_URL}/health`, { signal: controller.signal });
     clearTimeout(timer);
     const result = await response.json();
