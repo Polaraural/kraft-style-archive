@@ -507,6 +507,8 @@ button { color: inherit; }
 .copy-prompt.copied { border-color: #2d7b62; background: #2d7b62; }
 .copy-prompt.ghost { background: transparent; color: #44352a; }
 .copy-prompt.ghost:hover { background: rgba(68,53,42,.1); }
+.copy-prompt.ghost.saved { border-color: #2d7b62; background: #2d7b62; color: #f4fff9; }
+.copy-prompt.ghost.failed { border-color: #a13d30; color: #a13d30; }
 
 .prompt-builder { padding: 12px 14px 4px; border-bottom: 1px dashed #c3ae93; background: rgba(185,132,77,.07); }
 .prompt-builder label { display: block; margin-bottom: 7px; color: #6b5a45; font: 700 12px/1.4 "Noto Sans SC", sans-serif; }

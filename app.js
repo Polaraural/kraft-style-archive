@@ -390,6 +390,9 @@ function renderMotion(item) {
 // 素材库数据：由 work/build-library-data.py 从本地素材库 styles/*/style.json 抽取
 let libraryData = null;
 let promptTargetValue = "";
+// 本地桥接：跑 work/library-bridge.py 后可直接写入素材库 prompts/ 目录
+const BRIDGE_URL = "http://127.0.0.1:8788";
+let bridgeReady = false;
 
 const promptExamples = ["App 首页", "产品落地页", "小红书封面", "汇报 PPT 封面", "微信小程序", "数据看板"];
 
@@ -522,9 +525,7 @@ async function loadLibraryData() {
   }
 }
 
-function downloadPromptFile() {
-  if (!currentDetail) return;
-  const { title, body } = buildPromptFile(currentDetail, promptTargetValue);
+function downloadPromptFile(title, body) {
   const blob = new Blob([body], { type: "text/markdown;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
@@ -534,6 +535,59 @@ function downloadPromptFile() {
   link.click();
   link.remove();
   setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
+function setSaveButtonLabel(text, state) {
+  els.downloadPrompt.textContent = text;
+  els.downloadPrompt.classList.toggle("saved", state === "ok");
+  els.downloadPrompt.classList.toggle("failed", state === "fail");
+}
+
+async function savePromptFile() {
+  if (!currentDetail) return;
+  const { title, body } = buildPromptFile(currentDetail, promptTargetValue);
+  if (bridgeReady) {
+    setSaveButtonLabel("保存中…");
+    try {
+      const response = await fetch(`${BRIDGE_URL}/save-prompt`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, body })
+      });
+      const result = await response.json();
+      if (result && result.ok) {
+        setSaveButtonLabel(result.overwrote ? "✓ 已覆盖素材库模板" : "✓ 已存入素材库", "ok");
+      } else {
+        setSaveButtonLabel("保存失败，改为下载", "fail");
+        downloadPromptFile(title, body);
+      }
+    } catch (error) {
+      setSaveButtonLabel("保存失败，改为下载", "fail");
+      downloadPromptFile(title, body);
+    }
+  } else {
+    downloadPromptFile(title, body);
+    setSaveButtonLabel("✓ 已下载 .md", "ok");
+  }
+  if (promptSaveTimer) clearTimeout(promptSaveTimer);
+  promptSaveTimer = setTimeout(() => {
+    setSaveButtonLabel(bridgeReady ? "保存到素材库" : "下载模板");
+  }, 2600);
+}
+
+// 探测本地桥接，决定按钮是「保存到素材库」还是「下载模板」
+async function probeBridge() {
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 1200);
+    const response = await fetch(`${BRIDGE_URL}/health`, { signal: controller.signal });
+    clearTimeout(timer);
+    const result = await response.json();
+    bridgeReady = Boolean(result && result.ok);
+  } catch (error) {
+    bridgeReady = false;
+  }
+  setSaveButtonLabel(bridgeReady ? "保存到素材库" : "下载模板");
 }
 
 const els = {
@@ -733,6 +787,7 @@ async function copyPrompt() {
 
 let copyResetTimer = null;
 let promptInputTimer = null;
+let promptSaveTimer = null;
 
 function render() {
   const category = categories.find(item => item.id === activeCategory);
@@ -759,7 +814,7 @@ window.addEventListener("resize", () => {
 els.dialog.addEventListener("click", event => { if (event.target === els.dialog) els.dialog.close(); });
 els.selectDetail.addEventListener("click", () => { if (currentDetail) toggleSelection(currentDetail.id); });
 els.copyPrompt.addEventListener("click", copyPrompt);
-els.downloadPrompt.addEventListener("click", downloadPromptFile);
+els.downloadPrompt.addEventListener("click", savePromptFile);
 els.generatePrompt.addEventListener("click", renderPrompt);
 els.promptTarget.addEventListener("input", event => {
   promptTargetValue = event.target.value;
@@ -780,6 +835,7 @@ document.addEventListener("keydown", event => {
 
 render();
 loadLibraryData();
+probeBridge();
 
 // 支持 ?style=<id> 深链，便于直接分享某张风格卡
 const deepLink = new URLSearchParams(location.search).get("style");
