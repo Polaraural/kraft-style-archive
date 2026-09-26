@@ -376,13 +376,16 @@ function renderMotion(item) {
   replay.className = "mc-replay";
   replay.textContent = "↻ 重播动效";
   replay.addEventListener("click", () => renderMotion(item));
-  const original = document.createElement("a");
-  original.className = "mc-original";
-  original.href = asset.src;
-  original.target = "_blank";
-  original.rel = "noopener";
-  original.textContent = "打开原件 ↗";
-  actions.append(replay, original);
+  actions.append(replay);
+  if (asset.src) {
+    const original = document.createElement("a");
+    original.className = "mc-original";
+    original.href = asset.src;
+    original.target = "_blank";
+    original.rel = "noopener";
+    original.textContent = "打开原件 ↗";
+    actions.append(original);
+  }
   caption.append(source, title, list, note, actions);
   els.motionCaption.replaceChildren(caption);
 }
