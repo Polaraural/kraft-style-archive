@@ -125,6 +125,152 @@ const categories = [
   { id: "special", label: "特殊界面", color: "#8353a8", description: "地图、折射玻璃和特殊技术能力。" }
 ];
 
+// 每个素材的可复制提示词：个人风格为手工拆解，其余按字段自动生成。
+const prompts = {
+  "blue-journal": `复现一套「蓝白手账」风格的界面。
+
+配色：点阵方格纸底 #E8F0FE / #F0F4F8，墨水蓝主色 #2A5BA7，正文深灰蓝，纸面留白 #FFFFFF。
+版式：像摊开的纸质手账——圆润的中文标题、手写体批注、胶带贴纸、回形针和页码标签；网格用 12px 点阵。
+中文排版：思源黑体 / Noto Sans SC，标题字重 700，正文 15px / 行高 1.8，字距 0.01em。
+动效：
+1) 便签纸片从下方 14px 处以 260ms cubic-bezier(.2,.85,.28,1) 滑入并回正 1.5° 倾斜；
+2) 勾选框逐条打勾，用 scale 从 0 到 1 的描边动画，每条间隔 180ms；
+3) 切换页面时整页向下平移 8px 并淡出，像翻过一页纸。
+交互反馈保持轻、软、慢，不使用弹跳或强对比位移。`,
+
+  "puploop": `复现「牛皮纸档案袋」风格的作品集界面。
+
+配色：牛皮纸 #B9824D、近黑 #171512、米白 #F3EBDD，点缀荧光黄 #F4DA42 与印章红 #E84B38。
+结构：牛皮纸文件袋 + 黑白作品卡 + 回形针 + 编号章 + 荧光贴纸。
+材质：纸张噪点、轻微折痕、柔和投影，不要发光。
+动效：
+1) 卡片从档案袋口向上抽出 40px，时长 300ms，缓动 cubic-bezier(.2,.85,.28,1)；
+2) 抽出过程中先倾斜 -3° 再回正，多张卡片依次叠放，每张延迟 90ms；
+3) 悬停时整张卡抬升 6px 并加深投影。`,
+
+  "peg": `复现「Peg 中文极简」设计系统。
+
+配色：暖白底 #FAFAF8，正文近黑 #16181D，单一强调色翡翠绿 #00A878，次级文字 #8A8A8E。
+中文排版：Noto Sans SC / 思源黑体，正文 16px、行高 1.75、字距 0.01em；标题字重 700；正文段落宽度控制在 34 个汉字以内。
+约束：只允许一个强调色，强调只出现在链接、选中态和 2px 指示条上；不使用阴影和渐变。
+动效：
+1) 内容以 200ms 淡入 + 向上 8px 推入，缓动 cubic-bezier(.2,.8,.3,1)；
+2) 标题逐字弹入，每字延迟 28ms，位移 6px；
+3) 强调色指示条从左侧 0 宽度生长到 100%，时长 320ms。
+禁止使用缩放和旋转。`,
+
+  "retro": `复现「复古档案册」风格的研究档案界面。
+
+配色：底色 #D9D0BE，正文 #28241F，辅助 #857866，印章红 #B54B34。
+版式：模拟连续打印纸——等宽字体、装订孔、页码、打字机对齐的编号与虚线分隔。
+字体：中文用 Noto Sans SC，编号与英文用 Space Mono。
+动效：
+1) 文字逐行打印，每行间隔 180ms，行尾保留闪烁光标；
+2) 翻页使用 perspective 900px 的 3D 翻页，rotateY 从 0 到 -95°，时长 480ms，翻动时纸张阴影加深；
+3) 印章落下时从 1.4 倍缩放到 1 倍并轻微旋转 -6°，时长 220ms。`,
+
+  "variant": `复现「深色创作工作台」界面。
+
+配色：画布 #080808，面板 #1C1C1C，主文字 #E8E8E8，次级 #757575，分隔线 #2A2A2A（1px）。
+结构：左侧 56px 窄图标栏 + 中央无限画布 + 底部悬浮输入框。
+动效：
+1) 侧栏图标依次淡入，每个延迟 40ms；
+2) 输入框聚焦时边框从 #2A2A2A 过渡到 #E8E8E8，时长 180ms，光标闪烁；
+3) 生成结果卡片以 12px 上浮 + 淡入出现，投影扩散但不发光。
+整体保持低对比、无彩色、无发光。`,
+
+  "xiaohongshu": `这条素材目前只有来源记录，还没有取得可验证的帖子画面，暂时不要用它做风格参考。
+
+建议：等补上真实截图后再拆解配色、版式与动效；在此之前不要推测它的具体视觉元素。`
+};
+
+// 动效演示：用真实 CSS 动画还原该风格的动效，仅个人风格已拆解。
+const motionDemos = {
+  "blue-journal": {
+    motion: "纸片轻移 · 勾选反馈 · 纸页下移",
+    steps: ["便签纸片滑入并回正", "勾选项逐条打勾", "纸页向下滑动翻过"],
+    html: `<div class="demo demo-journal">
+      <div class="dj-paper"><span class="dj-punch"></span><span class="dj-punch"></span><span class="dj-punch"></span>
+        <div class="dj-head">14 Days</div><div class="dj-rule"></div><div class="dj-rule"></div><div class="dj-rule short"></div>
+      </div>
+      <div class="dj-tasks">
+        <div class="dj-task" style="--n:0"><i></i><b>整理今日灵感</b></div>
+        <div class="dj-task" style="--n:1"><i></i><b>记录阅读笔记</b></div>
+        <div class="dj-task" style="--n:2"><i></i><b>收进档案袋</b></div>
+      </div>
+      <div class="dj-pages"><i></i><i></i><i></i></div>
+      <div class="dj-slip">NEW NOTE</div>
+    </div>`
+  },
+  "puploop": {
+    motion: "抽卡 · 叠放 · 轻微倾斜",
+    steps: ["卡片从档案袋口抽出", "多张卡片依次叠放", "抽出时先倾斜再回正"],
+    html: `<div class="demo demo-puploop">
+      <div class="pl-cards">
+        <div class="pl-card" style="--n:2"><span>03</span></div>
+        <div class="pl-card" style="--n:1"><span>02</span></div>
+        <div class="pl-card" style="--n:0"><span>01</span></div>
+      </div>
+      <div class="pl-pocket"><div class="pl-pocket-lip"></div><span class="pl-label">PUP LOOP</span></div>
+      <div class="pl-sticker">★</div>
+    </div>`
+  },
+  "peg": {
+    motion: "逐字弹入 · 内容推入 · 指示条生长",
+    steps: ["标题逐字弹入", "正文向上推入淡显", "绿色指示条从左生长"],
+    html: `<div class="demo demo-peg">
+      <div class="pg-title">${"简洁，但不冷淡。".split("").map((c,i)=>`<i style="--c:${i}">${c}</i>`).join("")}</div>
+      <div class="pg-lines">
+        <div class="pg-line" style="--n:0"></div>
+        <div class="pg-line" style="--n:1"></div>
+        <div class="pg-line short" style="--n:2"></div>
+      </div>
+      <div class="pg-bar"><i></i></div>
+      <div class="pg-dot"></div>
+    </div>`
+  },
+  "retro": {
+    motion: "逐行打印 · 光标闪烁 · 印章落下",
+    steps: ["等宽文字逐行打印", "行尾光标闪烁", "印章从大到小落下"],
+    html: `<div class="demo demo-retro">
+      <div class="rt-paper">
+        <span class="rt-hole"></span><span class="rt-hole"></span><span class="rt-hole"></span>
+        <div class="rt-meta">ARCHIVE / 04 &nbsp; 1997</div>
+        <div class="rt-line" style="--n:0">记录，是让时间留下折痕。</div>
+        <div class="rt-line" style="--n:1">每条编号都对应一次研究。</div>
+        <div class="rt-line" style="--n:2">归档完成，等待复核。</div>
+        <div class="rt-caret"></div>
+      </div>
+      <div class="rt-stamp">已归档</div>
+    </div>`
+  },
+  "variant": {
+    motion: "面板淡入 · 输入框聚焦 · 卡片浮起",
+    steps: ["侧栏图标依次淡入", "输入框聚焦描边亮起", "结果卡片上浮出现"],
+    html: `<div class="demo demo-variant">
+      <div class="vr-rail"><i style="--n:0"></i><i style="--n:1"></i><i style="--n:2"></i><i style="--n:3"></i></div>
+      <div class="vr-card" style="--n:0; top: 20%"></div>
+      <div class="vr-card" style="--n:1; top: 42%"></div>
+      <div class="vr-input"><span>描述你想要的画面…</span><i class="vr-caret"></i></div>
+    </div>`
+  }
+};
+
+function buildPrompt(item) {
+  if (prompts[item.id]) return prompts[item.id];
+  return [
+    `复现「${item.title}」这套视觉风格。`,
+    ``,
+    `风格概述：${item.summary}`,
+    `视觉元素：${item.elements}`,
+    `适用场景：${item.use}`,
+    `动效参考：${item.motion}`,
+    `色板：${item.colors.join(" / ")}`,
+    ``,
+    `要求：保持该风格的层级、留白与节奏；控件状态完整；动效时长控制在 120–300ms，缓动使用 ease-out；中文排版使用思源黑体 / Noto Sans SC，行高不低于 1.6。`
+  ].join("\n");
+}
+
 const els = {
   nav: document.querySelector("#categoryNav"), grid: document.querySelector("#libraryGrid"), template: document.querySelector("#cardTemplate"),
   search: document.querySelector("#searchInput"), count: document.querySelector("#resultCount"), activeLabel: document.querySelector("#activeLabel"),
@@ -134,7 +280,9 @@ const els = {
   dialogClose: document.querySelector("#dialogClose"), detailImage: document.querySelector("#detailImage"), detailNumber: document.querySelector("#detailNumber"),
   detailCategory: document.querySelector("#detailCategory"), detailTitle: document.querySelector("#detailTitle"), detailSummary: document.querySelector("#detailSummary"),
   detailTags: document.querySelector("#detailTags"), detailUse: document.querySelector("#detailUse"), detailElements: document.querySelector("#detailElements"),
-  detailMotion: document.querySelector("#detailMotion"), detailSwatches: document.querySelector("#detailSwatches"), selectDetail: document.querySelector("#selectDetail")
+  detailMotion: document.querySelector("#detailMotion"), detailSwatches: document.querySelector("#detailSwatches"), selectDetail: document.querySelector("#selectDetail"),
+  visualTabs: document.querySelector("#visualTabs"), visualBody: document.querySelector("#visualBody"), motionStage: document.querySelector("#detailMotionStage"),
+  motionCaption: document.querySelector("#detailMotionCaption"), promptText: document.querySelector("#detailPrompt"), copyPrompt: document.querySelector("#copyPrompt")
 };
 
 let activeCategory = "all";
@@ -256,9 +404,100 @@ function openDetail(item) {
   els.detailSwatches.replaceChildren(...item.colors.map(color => {
     const swatch = document.createElement("i"); swatch.style.background = color; swatch.title = color; return swatch;
   }));
+  els.promptText.textContent = buildPrompt(item);
+  resetCopyButton();
+  renderMotion(item);
+  setVisualView(motionDemos[item.id] ? "motion" : "cover");
   updateDetailSelect();
+  els.dialog.scrollTop = 0;
   if (!els.dialog.open) els.dialog.showModal();
 }
+
+// 左侧视图：动效演示 / 原图封面
+function setVisualView(view) {
+  const hasDemo = Boolean(currentDetail && motionDemos[currentDetail.id]);
+  const next = view === "motion" && hasDemo ? "motion" : "cover";
+  els.visualBody.dataset.view = next;
+  els.motionCaption.classList.toggle("on", next === "motion");
+  [...els.visualTabs.querySelectorAll("button")].forEach(button => {
+    const selected = button.dataset.view === next;
+    button.setAttribute("aria-selected", String(selected));
+    button.disabled = button.dataset.view === "motion" && !hasDemo;
+  });
+  if (next === "motion") replayMotion();
+}
+
+// 重建动效舞台，让 CSS 动画从头播放
+function replayMotion() {
+  const item = currentDetail;
+  if (!item) return;
+  const demo = motionDemos[item.id];
+  if (!demo) return;
+  els.motionStage.innerHTML = demo.html;
+}
+
+function renderMotion(item) {
+  const demo = motionDemos[item.id];
+  if (!demo) {
+    els.motionStage.replaceChildren();
+    els.motionCaption.innerHTML = '<p class="mc-empty">这条素材还没有拆解动效，可以先看原图封面，或参考右侧的动效说明。</p>';
+    return;
+  }
+  els.motionStage.innerHTML = demo.html;
+  const caption = document.createElement("div");
+  const title = document.createElement("p");
+  title.className = "mc-motion";
+  title.textContent = demo.motion;
+  const list = document.createElement("ol");
+  demo.steps.forEach(step => {
+    const li = document.createElement("li");
+    li.textContent = step;
+    list.append(li);
+  });
+  const replay = document.createElement("button");
+  replay.type = "button";
+  replay.className = "mc-replay";
+  replay.textContent = "↻ 重播动效";
+  replay.addEventListener("click", replayMotion);
+  caption.append(title, list, replay);
+  els.motionCaption.replaceChildren(caption);
+}
+
+function resetCopyButton() {
+  els.copyPrompt.textContent = "复制提示词";
+  els.copyPrompt.classList.remove("copied");
+}
+
+async function copyPrompt() {
+  if (!currentDetail) return;
+  const text = buildPrompt(currentDetail);
+  let ok = false;
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      ok = true;
+    }
+  } catch (error) {
+    ok = false;
+  }
+  if (!ok) {
+    const helper = document.createElement("textarea");
+    helper.value = text;
+    helper.setAttribute("readonly", "");
+    helper.style.position = "fixed";
+    helper.style.opacity = "0";
+    document.body.append(helper);
+    helper.select();
+    try { ok = document.execCommand("copy"); } catch (error) { ok = false; }
+    helper.remove();
+  }
+  els.copyPrompt.textContent = ok ? "✓ 已复制" : "复制失败，请手动选择";
+  els.copyPrompt.classList.toggle("copied", ok);
+  if (copyResetTimer) clearTimeout(copyResetTimer);
+  copyResetTimer = setTimeout(resetCopyButton, 2200);
+}
+
+let copyResetTimer = null;
 
 function render() {
   const category = categories.find(item => item.id === activeCategory);
@@ -280,6 +519,12 @@ els.clearBoard.addEventListener("click", () => { selected.clear(); render(); });
 els.dialogClose.addEventListener("click", () => els.dialog.close());
 els.dialog.addEventListener("click", event => { if (event.target === els.dialog) els.dialog.close(); });
 els.selectDetail.addEventListener("click", () => { if (currentDetail) toggleSelection(currentDetail.id); });
+els.copyPrompt.addEventListener("click", copyPrompt);
+els.visualTabs.addEventListener("click", event => {
+  const button = event.target.closest("button[data-view]");
+  if (!button || button.disabled) return;
+  setVisualView(button.dataset.view);
+});
 document.addEventListener("keydown", event => {
   if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); els.search.focus(); }
 });

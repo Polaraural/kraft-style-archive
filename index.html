@@ -88,7 +88,15 @@
     <dialog class="detail-dialog" id="detailDialog">
       <button class="dialog-close" id="dialogClose" type="button" aria-label="关闭详情">×</button>
       <div class="detail-visual">
-        <img id="detailImage" alt="" />
+        <div class="visual-tabs" id="visualTabs" role="tablist" aria-label="查看方式">
+          <button type="button" role="tab" data-view="motion" aria-selected="true">动效演示</button>
+          <button type="button" role="tab" data-view="cover" aria-selected="false">原图封面</button>
+        </div>
+        <div class="visual-body" id="visualBody" data-view="motion">
+          <div class="motion-stage" id="detailMotionStage" role="tabpanel" aria-label="动效演示"></div>
+          <img id="detailImage" alt="" />
+        </div>
+        <div class="motion-caption" id="detailMotionCaption"></div>
         <span class="detail-number" id="detailNumber"></span>
       </div>
       <div class="detail-copy">
@@ -102,6 +110,16 @@
           <div><dt>动效</dt><dd id="detailMotion"></dd></div>
         </dl>
         <div class="swatches" id="detailSwatches" aria-label="风格色票"></div>
+
+        <section class="prompt-box">
+          <div class="prompt-head">
+            <p class="eyebrow">PROMPT / 提示词</p>
+            <button class="copy-prompt" id="copyPrompt" type="button">复制提示词</button>
+          </div>
+          <pre class="prompt-text" id="detailPrompt" tabindex="0"></pre>
+          <p class="prompt-hint">复制后可直接粘贴给 AI 设计或编码工具，用来复现这套风格与动效。</p>
+        </section>
+
         <button class="select-detail" id="selectDetail" type="button">放入本次灵感板</button>
       </div>
     </dialog>
