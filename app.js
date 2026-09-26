@@ -387,19 +387,153 @@ function renderMotion(item) {
   els.motionCaption.replaceChildren(caption);
 }
 
-function buildPrompt(item) {
-  if (prompts[item.id]) return prompts[item.id];
+// 素材库数据：由 work/build-library-data.py 从本地素材库 styles/*/style.json 抽取
+let libraryData = null;
+let promptTargetValue = "";
+
+const promptExamples = ["App 首页", "产品落地页", "小红书封面", "汇报 PPT 封面", "微信小程序", "数据看板"];
+
+const tokenLabels = {
+  colors: "配色", fonts: "字体", typography: "排版", typography_px: "字号",
+  layout: "布局", motion: "动效", spacing: "间距", effects: "效果", shadows: "阴影"
+};
+
+function tokenLines(entry) {
+  const groups = entry.tokens || {};
+  const order = ["colors", "fonts", "typography", "typography_px", "layout", "spacing", "motion", "effects", "shadows"];
+  const keys = [...order.filter(key => groups[key]), ...Object.keys(groups).filter(key => !order.includes(key))];
+  return keys.map(key => {
+    const body = (groups[key] || []).map(([name, value]) => `${name} ${value}`).join("、");
+    return `${tokenLabels[key] || key}：${body}`;
+  }).filter(line => line.length > 4);
+}
+
+function fallbackPrompt(item, goal) {
   return [
-    `复现「${item.title}」这套视觉风格。`,
-    ``,
+    `使用 $style-library 中的素材条目作为参考，为${goal}制作。`,
+    "",
     `风格概述：${item.summary}`,
     `视觉元素：${item.elements}`,
     `适用场景：${item.use}`,
     `动效参考：${item.motion}`,
     `色板：${item.colors.join(" / ")}`,
-    ``,
-    `要求：保持该风格的层级、留白与节奏；控件状态完整；动效时长控制在 120–300ms，缓动使用 ease-out；中文排版使用思源黑体 / Noto Sans SC，行高不低于 1.6。`
+    "",
+    "实现要求：保持该风格的层级、留白与节奏；控件状态完整；中文排版使用思源黑体 / Noto Sans SC，行高不低于 1.6；不要覆盖素材库原件。"
   ].join("\n");
+}
+
+// 生成复现提示词：优先使用素材库 style.json 的真实参数
+function buildPrompt(item, target) {
+  const goal = (target === undefined ? promptTargetValue : target || "").trim() || "【产品用途】";
+  const entry = libraryData && libraryData[item.id];
+  if (!entry) return prompts[item.id] && !promptTargetValue ? prompts[item.id] : fallbackPrompt(item, goal);
+
+  const lines = [];
+  lines.push(`使用 $style-library 中的 ${entry.libraryId} 作为参考，为${goal}制作。`);
+  lines.push("");
+  lines.push("第一步：先读取素材库档案，以它作为唯一权威来源");
+  lines.push(`- 风格素材库/styles/${entry.libraryId}/style.json`);
+  lines.push(`- 风格素材库/styles/${entry.libraryId}/STYLE.md`);
+  lines.push("");
+  const tokens = tokenLines(entry);
+  if (tokens.length) {
+    lines.push("可复用参数（取自 style.json，请照抄数值，不要自行改动）");
+    tokens.forEach(line => lines.push(`- ${line}`));
+    lines.push("");
+  }
+  const assets = Object.entries(entry.assets || {});
+  if (assets.length) {
+    lines.push("素材库原件（可引用，不要覆盖）");
+    assets.forEach(([key, value]) => lines.push(`- ${key}: 风格素材库/styles/${entry.libraryId}/${value}`));
+    lines.push("");
+  }
+  lines.push("实现要求");
+  lines.push("- 只复用上面记录的参数，不要引入档案里没有的效果；");
+  lines.push("- 中文内容另选适配字体，正文行高不低于 1.6；");
+  lines.push(`- 不要修改 风格素材库/styles/${entry.libraryId}/ 下的任何原件；`);
+  lines.push("- 完成后说明哪些参数来自档案、哪些是你自行决定的。");
+  if ((entry.reuseNotes || []).length) {
+    lines.push("");
+    lines.push("素材库备注");
+    entry.reuseNotes.forEach(note => lines.push(`- ${note}`));
+  }
+  return lines.join("\n");
+}
+
+// 导出成素材库 prompts/ 目录可直接使用的模板
+function buildPromptFile(item, target) {
+  const entry = libraryData && libraryData[item.id];
+  const baseName = (entry ? entry.name : item.title).split("·")[0].trim();
+  const goal = (target || "").trim();
+  const safeGoal = goal ? goal.replace(/[\\/:*?"<>|\s]+/g, "").slice(0, 14) : "";
+  const title = `${baseName}复现${safeGoal ? "-" + safeGoal : ""}`;
+  const today = new Date().toISOString().slice(0, 10);
+  const body = [
+    "---",
+    "cssclasses: [style-library]",
+    "---",
+    "",
+    "[[风格素材库/素材库首页|首页]]　/　[[风格素材库/prompts/INDEX|提示词]]",
+    "",
+    `# ${title}`,
+    "",
+    "[[风格素材库/prompts/INDEX|← 返回提示词库]]",
+    "",
+    "**用法：** 复制下面文本，替换【占位内容】，再附上你的素材或项目需求。",
+    "",
+    "```text",
+    buildPrompt(item, target),
+    "```",
+    "",
+    "> [!info]- 验证状态与使用记录",
+    `> 由风格素材库网页于 ${today} 生成；来源条目 \`${entry ? entry.libraryId : item.id}\`。尚未完成实际生成效果验证。暂无使用记录。`,
+    ""
+  ].join("\n");
+  return { title, body };
+}
+
+function renderPrompt() {
+  if (!currentDetail) return;
+  els.promptText.textContent = buildPrompt(currentDetail);
+}
+
+function renderPromptChips() {
+  els.promptChips.replaceChildren(...promptExamples.map(text => {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.textContent = text;
+    chip.addEventListener("click", () => {
+      els.promptTarget.value = text;
+      promptTargetValue = text;
+      renderPrompt();
+    });
+    return chip;
+  }));
+}
+
+async function loadLibraryData() {
+  try {
+    const response = await fetch("./assets/library-data.json", { cache: "no-cache" });
+    if (!response.ok) return;
+    libraryData = await response.json();
+    if (currentDetail) renderPrompt();
+  } catch (error) {
+    libraryData = null;
+  }
+}
+
+function downloadPromptFile() {
+  if (!currentDetail) return;
+  const { title, body } = buildPromptFile(currentDetail, promptTargetValue);
+  const blob = new Blob([body], { type: "text/markdown;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${title}.md`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
 }
 
 const els = {
@@ -413,7 +547,9 @@ const els = {
   detailTags: document.querySelector("#detailTags"), detailUse: document.querySelector("#detailUse"), detailElements: document.querySelector("#detailElements"),
   detailMotion: document.querySelector("#detailMotion"), detailSwatches: document.querySelector("#detailSwatches"), selectDetail: document.querySelector("#selectDetail"),
   visualTabs: document.querySelector("#visualTabs"), visualBody: document.querySelector("#visualBody"), motionStage: document.querySelector("#detailMotionStage"),
-  motionCaption: document.querySelector("#detailMotionCaption"), promptText: document.querySelector("#detailPrompt"), copyPrompt: document.querySelector("#copyPrompt")
+  motionCaption: document.querySelector("#detailMotionCaption"), promptText: document.querySelector("#detailPrompt"), copyPrompt: document.querySelector("#copyPrompt"),
+  promptTarget: document.querySelector("#promptTarget"), generatePrompt: document.querySelector("#generatePrompt"), promptChips: document.querySelector("#promptChips"),
+  downloadPrompt: document.querySelector("#downloadPrompt"), promptHint: document.querySelector("#promptHint")
 };
 
 let activeCategory = "all";
@@ -535,7 +671,10 @@ function openDetail(item) {
   els.detailSwatches.replaceChildren(...item.colors.map(color => {
     const swatch = document.createElement("i"); swatch.style.background = color; swatch.title = color; return swatch;
   }));
-  els.promptText.textContent = buildPrompt(item);
+  promptTargetValue = "";
+  els.promptTarget.value = "";
+  renderPromptChips();
+  renderPrompt();
   resetCopyButton();
   renderMotion(item);
   setVisualView(motionAssets[item.id] ? "motion" : "cover");
@@ -559,13 +698,13 @@ function setVisualView(view) {
 }
 
 function resetCopyButton() {
-  els.copyPrompt.textContent = "复制提示词";
+  els.copyPrompt.textContent = "复制";
   els.copyPrompt.classList.remove("copied");
 }
 
 async function copyPrompt() {
   if (!currentDetail) return;
-  const text = buildPrompt(currentDetail);
+  const text = els.promptText.textContent || buildPrompt(currentDetail);
   let ok = false;
   try {
     if (navigator.clipboard && window.isSecureContext) {
@@ -593,6 +732,7 @@ async function copyPrompt() {
 }
 
 let copyResetTimer = null;
+let promptInputTimer = null;
 
 function render() {
   const category = categories.find(item => item.id === activeCategory);
@@ -619,6 +759,16 @@ window.addEventListener("resize", () => {
 els.dialog.addEventListener("click", event => { if (event.target === els.dialog) els.dialog.close(); });
 els.selectDetail.addEventListener("click", () => { if (currentDetail) toggleSelection(currentDetail.id); });
 els.copyPrompt.addEventListener("click", copyPrompt);
+els.downloadPrompt.addEventListener("click", downloadPromptFile);
+els.generatePrompt.addEventListener("click", renderPrompt);
+els.promptTarget.addEventListener("input", event => {
+  promptTargetValue = event.target.value;
+  if (promptInputTimer) clearTimeout(promptInputTimer);
+  promptInputTimer = setTimeout(renderPrompt, 260);
+});
+els.promptTarget.addEventListener("keydown", event => {
+  if (event.key === "Enter") { event.preventDefault(); renderPrompt(); }
+});
 els.visualTabs.addEventListener("click", event => {
   const button = event.target.closest("button[data-view]");
   if (!button || button.disabled) return;
@@ -629,6 +779,7 @@ document.addEventListener("keydown", event => {
 });
 
 render();
+loadLibraryData();
 
 // 支持 ?style=<id> 深链，便于直接分享某张风格卡
 const deepLink = new URLSearchParams(location.search).get("style");

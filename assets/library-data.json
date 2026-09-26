@@ -1,0 +1,1219 @@
+{
+ "blue-journal": {
+  "libraryId": "blue-stationery-journal",
+  "name": "蓝白手账 · Habit Journal",
+  "tags": [
+   "蓝白",
+   "手写",
+   "文具",
+   "日记",
+   "习惯追踪",
+   "3D叠层"
+  ],
+  "summary": "蓝色墨水、白纸、方格纸背景、手写正文与旋转叠层组成的习惯日记。",
+  "evidence": "参数来自实际 HTML/CSS/JavaScript；本地页面截图已渲染并目视检查。",
+  "source": {
+   "url": "https://variant.com/design/e65d9c6c-03f3-4698-a3b9-ab20f360e808.html?t=1790119625242",
+   "type": "webpage",
+   "author": "unknown",
+   "license": "页面及设计授权未知；字体附 OFL 许可证"
+  },
+  "reuseNotes": [
+   "适合日记、阅读记录、习惯养成等轻量界面",
+   "只记录原页面英语字体；中文没有验证，复用中文时另选配套字体",
+   "3D 模型应保留为代码组件，不能用扁平截图替代后声称可编辑",
+   "页面为设计参考，商用复用前确认页面与素材授权"
+  ],
+  "assets": {
+   "original": "source.html",
+   "preview": "preview.html",
+   "font_css": "fonts.css",
+   "fonts": "assets/fonts",
+   "cover": "assets/cover.png"
+  },
+  "tokens": {
+   "colors": [
+    [
+     "colors.paper",
+     "#FFFFFF"
+    ],
+    [
+     "colors.ink",
+     "#2A5BA7"
+    ],
+    [
+     "colors.light_blue",
+     "#E8F0FE"
+    ],
+    [
+     "colors.background",
+     "#F0F4F8"
+    ],
+    [
+     "colors.grid",
+     "rgba(42,91,167,0.1)"
+    ]
+   ],
+   "fonts": [
+    [
+     "fonts.main.family",
+     "Quicksand"
+    ],
+    [
+     "fonts.main.weights",
+     "400、500、600"
+    ],
+    [
+     "fonts.handwriting.family",
+     "Gaegu"
+    ],
+    [
+     "fonts.handwriting.weights",
+     "400、700"
+    ]
+   ],
+   "typography_px": [
+    [
+     "typography_px.eyebrow",
+     14
+    ],
+    [
+     "typography_px.streak",
+     32
+    ],
+    [
+     "typography_px.date",
+     12
+    ],
+    [
+     "typography_px.diary",
+     20
+    ]
+   ],
+   "layout": [
+    [
+     "layout.frame_width",
+     440
+    ],
+    [
+     "layout.frame_height",
+     880
+    ],
+    [
+     "layout.frame_radius",
+     40
+    ],
+    [
+     "layout.frame_border",
+     8
+    ],
+    [
+     "layout.diary_padding",
+     32
+    ],
+    [
+     "layout.grid_size",
+     20
+    ]
+   ],
+   "motion": [
+    [
+     "motion.engine",
+     "Three.js r128"
+    ],
+    [
+     "motion.layers",
+     14
+    ],
+    [
+     "motion.rotation_per_frame",
+     0.005
+    ]
+   ]
+  }
+ },
+ "puploop": {
+  "libraryId": "puploop-portfolio",
+  "name": "PupLoop 纸质设计档案袋",
+  "tags": [
+   "作品集",
+   "牛皮纸",
+   "档案",
+   "贴纸拼贴",
+   "玩具感",
+   "荧光色",
+   "交互展示",
+   "微动效"
+  ],
+  "summary": "将设计作品集做成实体档案袋：牛皮纸文件夹与登记表作底，叠放作品页、荧光贴纸、回形针和可爱玩具周边；黑白信息设计中点入红、荧光黄、绿、蓝色，呈现玩味的设计工作室个性。",
+  "evidence": "已观看视频全长34.667秒，分辨率1152×720；观察0.0、3.0、7.0、11.0、16.0、21.0、26.0、31.0、33.7秒关键帧。颜色为画面视觉估值；未从源码读取字体或精确色值。实际可见档案袋缩放/抽出、作品页层叠切换、周边物品覆盖入场，以及手写注释和贴纸式标记。未分析音频。",
+  "source": {
+   "path": "/Users/cloud/Downloads/打开看看我的设计档案袋里有什么_打开看看我的设计档案袋里有什么_用Ai完成的PupLoop_个人作品.mp4",
+   "type": "local_video",
+   "license": "视频及画面中的作品版权/再利用许可未知"
+  },
+  "reuseNotes": [
+   "可迁移的是档案隐喻、纸张材质、作品页分层和明亮贴纸点色；不代表作品图、PupLoop 商标、角色或周边已获授权。",
+   "配色数值为从视频关键帧目视估算，非源设计变量。",
+   "视频抽帧可作为本条目的观察证据；复用至产品时请换成自有图文、商标与角色。"
+  ],
+  "assets": {
+   "cover": "assets/keyframes/frame-06-t21.0.jpg",
+   "video": "assets/original.mp4",
+   "keyframes": "assets/keyframes",
+   "timing": "timing.json"
+  },
+  "tokens": {
+   "colors": [
+    [
+     "colors.kraft_paper",
+     "约 #C8A47B"
+    ],
+    [
+     "colors.warm_white",
+     "约 #F4F2EC"
+    ],
+    [
+     "colors.ink_black",
+     "约 #111111"
+    ],
+    [
+     "colors.signal_red",
+     "约 #F41437"
+    ],
+    [
+     "colors.neon_yellow",
+     "约 #FFF000"
+    ],
+    [
+     "colors.accent_green",
+     "约 #26D83A"
+    ],
+    [
+     "colors.accent_blue",
+     "约 #20A9E8"
+    ]
+   ],
+   "typography": [
+    [
+     "typography.display",
+     "粗黑无衬线中英文字标；具体字体未知"
+    ],
+    [
+     "typography.body",
+     "中英混排的档案标签/表格字；具体字体未知"
+    ],
+    [
+     "typography.handwritten",
+     "手写体注释与品牌签名；具体字体未知"
+    ]
+   ],
+   "layout": [
+    [
+     "layout.composition",
+     "居中实体主物 + 大面积纯白留白 + 手写口号角标"
+    ],
+    [
+     "layout.layers",
+     "牛皮纸底板 / 白色档案页 / 黑色作品卡 / 荧光贴纸与周边"
+    ],
+    [
+     "layout.motif",
+     "条码、编号、表格、档案标签、回形针、撕齿/冲孔边、标签贴纸"
+    ]
+   ],
+   "motion": [
+    [
+     "motion.observed",
+     "档案袋缩放与抽出；作品卡/页面叠放切换；周边商品覆盖式进入画面；手形光标辅助交互演示"
+    ],
+    [
+     "motion.timing",
+     "关键帧支持上述动作，具体曲线和毫秒时长未做源码测量"
+    ]
+   ]
+  }
+ },
+ "peg": {
+  "libraryId": "peg-minimal-cjk",
+  "name": "Peg 极简排版 · 中文友好设计系统",
+  "tags": [
+   "极简",
+   "排版驱动",
+   "暖白",
+   "翡翠绿",
+   "中文排版",
+   "设计令牌",
+   "动效",
+   "开源"
+  ],
+  "summary": "以暖白纸面、深色文字和单一翡翠绿强调色构成的极简排版系统；提供中文专用字距/行高覆盖、Inter 与 Noto Sans SC，以及可访问的轻量转场和文字动效。",
+  "evidence": "已核验 GitHub README、MIT LICENSE、tokens/colors.css、typography.css、cjk.css、spacing.css、effects.css 与字体许可文件；仓库提交 bebc5d80e342ce12a3a16526cb15bda4fea246c0。规范值取自上游 token 文件；字体二进制从同一仓库下载。",
+  "source": {
+   "url": "https://github.com/v0id-byte/peg-design-system",
+   "type": "github_repository",
+   "commit": "bebc5d80e342ce12a3a16526cb15bda4fea246c0",
+   "license": "设计系统代码 MIT；附带字体分别为 SIL OFL 1.1，许可证已随字体保存"
+  },
+  "reuseNotes": [
+   "偏演示和数据叙事，作为普通 App 时建议只取中文排版、token 化与克制的动效，不必照搬大字号幻灯片布局。",
+   "颜色与中文行高来自上游源码；动效的适用方式按文档说明整理，须在目标产品中测试。",
+   "Noto Sans SC 完整可变字体体积约 17 MB；产品打包可按实际用字子集化。",
+   "保持 Inter/Noto Sans SC 各自的 OFL 许可证文件；字体不可脱离软件单独售卖。"
+  ],
+  "assets": {
+   "cover": "assets/cover.png",
+   "license": "LICENSE",
+   "readme": "README.md",
+   "tokens": "assets/tokens",
+   "guidelines": "assets/guidelines",
+   "fonts": "assets/fonts",
+   "transition_demo": "assets/transition-demo.html"
+  },
+  "tokens": {
+   "colors": [
+    [
+     "colors.paper",
+     "#FAFAF8"
+    ],
+    [
+     "colors.ink",
+     "#16181D"
+    ],
+    [
+     "colors.night",
+     "#0B0B0C"
+    ],
+    [
+     "colors.jade",
+     "#00A878"
+    ],
+    [
+     "colors.alert",
+     "#E5484D"
+    ],
+    [
+     "colors.mute",
+     "#8A8A8E"
+    ]
+   ],
+   "fonts": [
+    [
+     "fonts.display",
+     "Inter Variable"
+    ],
+    [
+     "fonts.latin_body",
+     "Inter Variable"
+    ],
+    [
+     "fonts.cjk",
+     "Noto Sans SC variable"
+    ],
+    [
+     "fonts.license",
+     "SIL OFL 1.1"
+    ]
+   ],
+   "typography": [
+    [
+     "typography.cjk_tracking",
+     "0"
+    ],
+    [
+     "typography.cjk_line_height.tight",
+     1.12
+    ],
+    [
+     "typography.cjk_line_height.snug",
+     1.2
+    ],
+    [
+     "typography.cjk_line_height.body",
+     1.6
+    ],
+    [
+     "typography.rule",
+     "中文 lang=zh-* 激活更松字距和更宽行高；英文可保留紧凑字距"
+    ]
+   ],
+   "layout": [
+    [
+     "layout.principles",
+     "无阴影、无渐变、尽量无卡片边框，内容直接置于暖白画布"
+    ],
+    [
+     "layout.spacing",
+     "tokenized spacing scale; see assets/tokens/spacing.css"
+    ]
+   ],
+   "motion": [
+    [
+     "motion.principles",
+     "尊重 prefers-reduced-motion；切换可用 dissolve / push-left / text-flip"
+    ],
+    [
+     "motion.examples",
+     "逐字弹入、文字翻入、线条描绘、图表增长；以原型/demo 验证为主"
+    ]
+   ]
+  }
+ },
+ "retro": {
+  "libraryId": "retro-archival-reader",
+  "name": "复古档案册 · Archival Reader",
+  "tags": [
+   "复古",
+   "档案",
+   "连续打印纸",
+   "等宽字体",
+   "翻页",
+   "黑白",
+   "纸张"
+  ],
+  "summary": "灰米色连续打印纸、装订孔、点状分隔线、档案编号与条形码，结合等宽文字和 3D 翻页。",
+  "evidence": "参数来自真实 iframe 设计 HTML/CSS/JS；封面为实际渲染截图。原始 DOM 顺序为 page3/page2/page1，初始显示 3/3，保留原样。",
+  "source": {
+   "url": "https://variant.com/design/f10c60bd-211a-4abf-b119-82463bce5216.html?t=1790140319143",
+   "type": "webpage",
+   "license": "设计授权未知；字体附 OFL"
+  },
+  "reuseNotes": [
+   "装饰条形码为 CSS 渐变，不代表可扫描数据",
+   "原版禁用文本选择、缩放并隐藏溢出，复用阅读工具时应调整",
+   "初始页码 3/3 与向左翻提示同时出现，源代码堆叠顺序如此；未擅自修复"
+  ],
+  "assets": {
+   "source": "source.html",
+   "preview": "preview.html",
+   "cover": "assets/cover.png",
+   "fonts": "assets/fonts",
+   "font_css": "fonts.css"
+  },
+  "tokens": {
+   "colors": [
+    [
+     "colors.paper",
+     "#e4e2d7"
+    ],
+    [
+     "colors.back",
+     "#dcdad0"
+    ],
+    [
+     "colors.ink",
+     "#161616"
+    ],
+    [
+     "colors.muted",
+     "#8a8a85"
+    ],
+    [
+     "colors.desk",
+     "#0a0a0a"
+    ]
+   ],
+   "fonts": [
+    [
+     "fonts.body",
+     "Space Mono"
+    ],
+    [
+     "fonts.display",
+     "VT323"
+    ]
+   ],
+   "layout": [
+    [
+     "layout.max_width",
+     600
+    ],
+    [
+     "layout.perforation_strip",
+     32
+    ],
+    [
+     "layout.hole_diameter",
+     12
+    ],
+    [
+     "layout.content_padding",
+     16
+    ],
+    [
+     "layout.columns",
+     2
+    ],
+    [
+     "layout.column_gap",
+     16
+    ],
+    [
+     "layout.border",
+     "1px dotted"
+    ]
+   ],
+   "motion": [
+    [
+     "motion.perspective",
+     2500
+    ],
+    [
+     "motion.rotation",
+     "rotateY(-180deg)"
+    ],
+    [
+     "motion.duration_seconds",
+     0.8
+    ],
+    [
+     "motion.easing",
+     "cubic-bezier(0.25,1,0.5,1)"
+    ],
+    [
+     "motion.swipe_threshold",
+     50
+    ]
+   ]
+  }
+ },
+ "variant": {
+  "libraryId": "variant-community-dark",
+  "name": "Variant 社区 · 深色创作工作台",
+  "tags": [
+   "深色",
+   "极简",
+   "创作工具",
+   "社区",
+   "悬浮输入框",
+   "窄侧栏"
+  ],
+  "summary": "黑色画布、窄图标导航、弱化标题与悬浮磨砂输入框，适合内容浏览与生成工具的工作台。",
+  "evidence": "结构来自用户粘贴 HTML；尺寸、颜色与模糊参数来自精确链接下载的 CSS。在线请求跳转登录，封面为结构示意图；未确认作品卡片与运行交互。",
+  "source": {
+   "url": "https://variant.com/community",
+   "type": "html",
+   "author": "Variant",
+   "license": "页面与品牌字体授权未确认"
+  },
+  "reuseNotes": [
+   "适合生成式创作工具、素材浏览器、社区画廊",
+   "不把网站 shell 字体误认为社区作品字体",
+   "不推断作品卡片样式或自动下载社区作品",
+   "品牌字体仅登记，未下载未授权资源"
+  ],
+  "assets": {
+   "cover": "assets/cover.svg",
+   "css": "assets/css",
+   "evidence": "source-evidence.md"
+  },
+  "tokens": {
+   "colors": [
+    [
+     "colors.canvas",
+     "#000000"
+    ],
+    [
+     "colors.logo",
+     "#F0EDE5"
+    ],
+    [
+     "colors.title",
+     "rgba(255,255,255,0.5)"
+    ],
+    [
+     "colors.composer",
+     "rgba(0,0,0,0.75)"
+    ]
+   ],
+   "fonts": [
+    [
+     "fonts.title",
+     "Inter 500"
+    ],
+    [
+     "fonts.declared",
+     "Inter、Variant Neue Display、Variant Neue Text"
+    ],
+    [
+     "fonts.note",
+     "品牌字体为 CSS 声明，不能推断所有节点最终使用字体"
+    ]
+   ],
+   "layout": [
+    [
+     "layout.sidebar_width",
+     52
+    ],
+    [
+     "layout.nav_control",
+     28
+    ],
+    [
+     "layout.nav_radius",
+     6
+    ],
+    [
+     "layout.topbar_height",
+     52
+    ],
+    [
+     "layout.title_font_size",
+     13
+    ],
+    [
+     "layout.composer_radius",
+     12
+    ],
+    [
+     "layout.composer_bottom",
+     10
+    ],
+    [
+     "layout.composer_blur",
+     25
+    ]
+   ]
+  }
+ },
+ "xiaohongshu": {
+  "libraryId": "xiaohongshu-6ab4ee31000000001a028e6c",
+  "name": "小红书参考 · 待补充视觉素材",
+  "tags": [
+   "小红书",
+   "待补充",
+   "视觉参考"
+  ],
+  "summary": "来源已登记，帖子内容暂时无法读取；尚未分析画面，也没有虚构其配色、字体或布局。",
+  "evidence": "2026-09-26：尝试直接打开用户提供的小红书链接和站内检索，均未取回帖子正文或图片。记录 URL 时移除了 xsec_token 等访问参数。需补充该帖截图后继续分析。",
+  "source": {
+   "url": "https://www.xiaohongshu.com/explore/6ab4ee31000000001a028e6c",
+   "type": "webpage",
+   "license": "原帖设计及图片授权未知"
+  },
+  "reuseNotes": [],
+  "assets": {
+   "cover": "assets/cover.png"
+  },
+  "tokens": {}
+ },
+ "scrolltide": {
+  "libraryId": "scrolltide",
+  "name": "Scrolltide · 3D 滚动叙事",
+  "tags": [
+   "3D",
+   "滚动叙事",
+   "shader",
+   "WebGL",
+   "营销网站"
+  ],
+  "summary": "以滚动驱动、3D 场景、GPU shader 和电影感转场为核心的完整网站设计方向。",
+  "evidence": "封面为 2026-09-26 获取的官网 Open Graph 图片；页面显示模板、组件、shader、section 与 UI screen 分类。",
+  "source": {
+   "type": "webpage",
+   "url": "https://www.scrolltide.co/",
+   "license": "个人与客户项目可用；模板、提示词和营销预览不可转售或再分发"
+  },
+  "reuseNotes": [
+   "适合品牌发布、产品故事和作品集。",
+   "核心信息应保留静态与 reduced-motion 版本。"
+  ],
+  "assets": {
+   "cover": "assets/cover.jpg"
+  },
+  "tokens": {
+   "layout": [
+    [
+     "layout",
+     "全屏 hero、章节式滚动、大图与留白交替"
+    ]
+   ],
+   "motion": [
+    [
+     "motion",
+     "scroll-linked timeline、3D camera、shader background"
+    ]
+   ]
+  }
+ },
+ "minimal": {
+  "libraryId": "minimal-gallery",
+  "name": "Minimal Gallery · 高端极简网站",
+  "tags": [
+   "极简",
+   "编辑感",
+   "留白",
+   "高端网站",
+   "策展"
+  ],
+  "summary": "以克制排版、充足留白、细腻图像和编辑式节奏为主的高端网站策展方向。",
+  "evidence": "站点本轮连接不稳定；封面为依据已确认分类制作的索引卡，并明确标注非网站截图。",
+  "source": {
+   "type": "webpage",
+   "url": "https://minimal.gallery/",
+   "license": "收录网站版权归各自权利人；仅作灵感研究入口"
+  },
+  "reuseNotes": [
+   "适合工作室、时尚、建筑与文化项目。",
+   "先确定内容密度，再选择极简程度。"
+  ],
+  "assets": {
+   "cover": "assets/cover.png"
+  },
+  "tokens": {
+   "colors": [
+    [
+     "colors",
+     "暖白、黑、低饱和灰"
+    ]
+   ],
+   "layout": [
+    [
+     "layout",
+     "大留白、非对称网格、编辑式图文"
+    ]
+   ]
+  }
+ },
+ "kage": {
+  "libraryId": "kage",
+  "name": "Kage · 真实产品 UI 灵感",
+  "tags": [
+   "真实产品",
+   "UI截图",
+   "组件",
+   "提示词",
+   "筛选"
+  ],
+  "summary": "把真实产品界面按组件、页面、风格、行业、颜色和技术栈筛选，并转成可执行设计提示。",
+  "evidence": "封面为 2026-09-26 获取的官网 Open Graph 图片；页面可见真实产品截图与多维筛选。",
+  "source": {
+   "type": "webpage",
+   "url": "https://kage.design/",
+   "license": "截图版权归原产品，仅用于灵感与评论"
+  },
+  "reuseNotes": [
+   "适合 App、SaaS 与真实业务页面。",
+   "不要把第三方截图当作可直接复用素材。"
+  ],
+  "assets": {
+   "cover": "assets/cover.png"
+  },
+  "tokens": {
+   "workflow": [
+    [
+     "workflow",
+     "先选页面类型、再按风格与颜色筛选、最后提炼提示词"
+    ]
+   ]
+  }
+ },
+ "refero": {
+  "libraryId": "refero-styles",
+  "name": "Refero Styles · 产品风格系统",
+  "tags": [
+   "设计系统",
+   "DESIGN.md",
+   "色彩",
+   "字体",
+   "间距",
+   "真实产品"
+  ],
+  "summary": "从真实网站抽取颜色、字体、间距、组件与 AI 可读 DESIGN.md 的风格目录。",
+  "evidence": "封面为官网 Open Graph 图片，已于 2026-09-26 目视检查。",
+  "source": {
+   "type": "webpage",
+   "url": "https://styles.refero.design/",
+   "license": "设计描述可研究；原产品截图、商标与品牌字体需逐项核验"
+  },
+  "reuseNotes": [
+   "适合在立项阶段确定完整设计语言。",
+   "选定单个风格后再建立独立项目条目。"
+  ],
+  "assets": {
+   "cover": "assets/cover.png"
+  },
+  "tokens": {
+   "artifacts": [
+    [
+     "artifacts",
+     "palette、typography、spacing、components、DESIGN.md"
+    ]
+   ]
+  }
+ },
+ "404s": {
+  "libraryId": "404s-design",
+  "name": "404s · 错误页与空状态",
+  "tags": [
+   "404",
+   "错误页",
+   "空状态",
+   "插画",
+   "品牌体验"
+  ],
+  "summary": "把错误页做成幽默、游戏、插画或品牌个性触点的专门画廊。",
+  "evidence": "封面为 2026-09-26 获取的官网 Open Graph 图片；授权说明依据官网法律页。",
+  "source": {
+   "type": "webpage",
+   "url": "https://404s.design/",
+   "license": "展示内容归原作者，仅用于灵感，不可作为素材再分发"
+  },
+  "reuseNotes": [
+   "适合 404、空数据、断网与权限不足页面。",
+   "趣味表达不能遮挡恢复路径。"
+  ],
+  "assets": {
+   "cover": "assets/cover.webp"
+  },
+  "tokens": {
+   "patterns": [
+    [
+     "patterns",
+     "返回主路径、轻量游戏、品牌插画、搜索与推荐"
+    ]
+   ]
+  }
+ },
+ "designmd": {
+  "libraryId": "designmd",
+  "name": "DESIGNmd · AI 可读设计系统",
+  "tags": [
+   "DESIGN.md",
+   "设计令牌",
+   "AI",
+   "设计系统",
+   "社区"
+  ],
+  "summary": "围绕 DESIGN.md 分享可被 AI 读取的颜色、排版、间距、组件与动效规范。",
+  "evidence": "本轮无法取得稳定官网预览；封面为依据已确认信息制作的索引卡，并明确标注非网站截图。",
+  "source": {
+   "type": "webpage",
+   "url": "https://designmd.ai/",
+   "license": "每份社区文件需按原作者与原项目单独核验"
+  },
+  "reuseNotes": [
+   "适合为编码代理提供完整设计约束。",
+   "下载社区文件后保留原始来源与授权。"
+  ],
+  "assets": {
+   "cover": "assets/cover.png"
+  },
+  "tokens": {
+   "artifacts": [
+    [
+     "artifacts",
+     "colors、typography、spacing、components、motion"
+    ]
+   ]
+  }
+ },
+ "shadcn": {
+  "libraryId": "shadcn-ui",
+  "name": "shadcn/ui · 产品组件底座",
+  "tags": [
+   "React",
+   "Tailwind",
+   "组件库",
+   "无障碍",
+   "产品UI",
+   "MIT"
+  ],
+  "summary": "可复制、可修改、状态完整的产品组件底座，适合建立自有设计系统。",
+  "evidence": "封面来自官网生成的 Open Graph 图片；README 与 MIT 许可证已保存。",
+  "source": {
+   "type": "website_and_repository",
+   "url": "https://ui.shadcn.com/",
+   "repository": "https://github.com/shadcn-ui/ui",
+   "license": "MIT"
+  },
+  "reuseNotes": [
+   "适合作为工作台和 App 的基础层。",
+   "先建立状态与可访问性，再叠加品牌风格。"
+  ],
+  "assets": {
+   "cover": "assets/cover.png",
+   "source_documents": "assets/source"
+  },
+  "tokens": {
+   "components": [
+    [
+     "components",
+     "form、dialog、menu、table、calendar、navigation"
+    ]
+   ],
+   "style": [
+    [
+     "style",
+     "中性、克制、令牌化"
+    ]
+   ]
+  }
+ },
+ "aceternity": {
+  "libraryId": "aceternity-ui",
+  "name": "Aceternity UI · 高表现力营销组件",
+  "tags": [
+   "React",
+   "Tailwind",
+   "Motion",
+   "3D卡片",
+   "视差",
+   "营销页面"
+  ],
+  "summary": "以光束、3D 卡片、视差、滚动设备模型、背景和文字动画为主的营销组件库。",
+  "evidence": "封面为 2026-09-26 获取的官网 banner；页面可见 React/Tailwind/Motion 组件与免费/Pro 分区。",
+  "source": {
+   "type": "webpage",
+   "url": "https://ui.aceternity.com/",
+   "license": "免费组件与付费 blocks/templates 混合；逐组件核验"
+  },
+  "reuseNotes": [
+   "适合落地页的一个视觉焦点。",
+   "同屏避免叠加多个强特效。"
+  ],
+  "assets": {
+   "cover": "assets/cover.png"
+  },
+  "tokens": {
+   "effects": [
+    [
+     "effects",
+     "beam、3D card、parallax、device scroll、animated background"
+    ]
+   ]
+  }
+ },
+ "magic": {
+  "libraryId": "magic-ui",
+  "name": "Magic UI · 轻量动画落地页",
+  "tags": [
+   "React",
+   "Tailwind",
+   "Motion",
+   "Bento",
+   "Marquee",
+   "MIT"
+  ],
+  "summary": "面向落地页的轻量动态组件，擅长 marquee、bento、globe、文字动画和社会证明。",
+  "evidence": "封面为官网 Open Graph 图片；README 与 MIT 许可证已保存。",
+  "source": {
+   "type": "website_and_repository",
+   "url": "https://magicui.design/",
+   "repository": "https://github.com/magicuidesign/magicui",
+   "license": "MIT"
+  },
+  "reuseNotes": [
+   "比重型 3D 更适合常规 SaaS 落地页。",
+   "动画服务于信息层级。"
+  ],
+  "assets": {
+   "cover": "assets/cover.png",
+   "source_documents": "assets/source"
+  },
+  "tokens": {
+   "components": [
+    [
+     "components",
+     "marquee、bento、globe、animated text、social proof"
+    ]
+   ]
+  }
+ },
+ "uiverse": {
+  "libraryId": "uiverse",
+  "name": "Uiverse · 社区 CSS 小组件",
+  "tags": [
+   "CSS",
+   "Tailwind",
+   "按钮",
+   "输入框",
+   "加载器",
+   "社区"
+  ],
+  "summary": "社区贡献的按钮、输入框、开关、加载器和卡片等 CSS/Tailwind 小组件集合。",
+  "evidence": "封面为官网首页元素预览图；Galaxy README 与 MIT 许可证已保存。",
+  "source": {
+   "type": "website_and_repository",
+   "url": "https://uiverse.io/",
+   "repository": "https://github.com/uiverse-io/galaxy",
+   "license": "Galaxy 仓库 MIT；社区元素保留作者信息并逐项核验"
+  },
+  "reuseNotes": [
+   "适合寻找单个控件的表现方式。",
+   "统一改写颜色、圆角和状态，避免拼贴感。"
+  ],
+  "assets": {
+   "cover": "assets/cover.png",
+   "source_documents": "assets/source"
+  },
+  "tokens": {
+   "components": [
+    [
+     "components",
+     "button、input、toggle、loader、card"
+    ]
+   ]
+  }
+ },
+ "uiable": {
+  "libraryId": "uiable",
+  "name": "UIAble · 真实业务界面模块",
+  "tags": [
+   "业务UI",
+   "表格",
+   "表单",
+   "仪表盘",
+   "React",
+   "MIT"
+  ],
+  "summary": "覆盖表单验证、表格、文件上传、设置和仪表盘的真实应用模块。",
+  "evidence": "封面为官网 Open Graph 图片；Community README 与 MIT 许可证已保存。",
+  "source": {
+   "type": "website_and_repository",
+   "url": "https://uiable.com/",
+   "repository": "https://github.com/codedthemes/uiable",
+   "license": "Community MIT；网站另有商业 Pro 内容"
+  },
+  "reuseNotes": [
+   "适合工作台、运营后台和复杂业务表单。",
+   "先复用信息架构，再定制视觉。"
+  ],
+  "assets": {
+   "cover": "assets/cover.png",
+   "source_documents": "assets/source"
+  },
+  "tokens": {
+   "modules": [
+    [
+     "modules",
+     "forms、validation、tables、upload、settings、dashboard"
+    ]
+   ]
+  }
+ },
+ "kinetics": {
+  "libraryId": "kinetics",
+  "name": "Kinetics · 弹簧物理交互",
+  "tags": [
+   "动效",
+   "弹簧",
+   "拖拽",
+   "磁吸",
+   "React",
+   "CSS"
+  ],
+  "summary": "以 spring 参数、直接操控和可中断反馈为核心的 Web App 微交互目录。",
+  "evidence": "封面为官网 Open Graph 图片；已保存公开 README 与页面源码证据。",
+  "source": {
+   "type": "website_and_repository",
+   "url": "https://kinetics.colorion.co/",
+   "repository": "https://github.com/ckissi/kinetics",
+   "license": "仓库未检测到明确许可证；按个人学习参考保存"
+  },
+  "reuseNotes": [
+   "用于研究手感与参数。",
+   "发布或商用前重新核验许可。",
+   "提供 reduced-motion 静态终态。"
+  ],
+  "assets": {
+   "cover": "assets/cover.png",
+   "source_documents": "assets/source"
+  },
+  "tokens": {
+   "motion": [
+    [
+     "motion",
+     "spring、drag、magnetic、counter、toast、tab indicator、hold-to-confirm"
+    ]
+   ],
+   "fonts": [
+    [
+     "fonts",
+     "Archivo、Inter、JetBrains Mono"
+    ]
+   ]
+  }
+ },
+ "motion-primitives": {
+  "libraryId": "motion-primitives",
+  "name": "Motion Primitives · 可组合运动原语",
+  "tags": [
+   "动效",
+   "React",
+   "Motion",
+   "文字动画",
+   "磁吸",
+   "MIT"
+  ],
+  "summary": "把文字、数字、倾斜、磁吸、聚光、dock 与 carousel 拆成可组合的运动原语。",
+  "evidence": "官网 Open Graph 地址错误指向 localhost，因此封面采用官网实际示例图片；README 与 MIT 许可证已保存。",
+  "source": {
+   "type": "website_and_repository",
+   "url": "https://motion-primitives.com/",
+   "repository": "https://github.com/ibelick/motion-primitives",
+   "license": "MIT"
+  },
+  "reuseNotes": [
+   "适合构建统一的动效语法。",
+   "一次只突出一个主要运动焦点。"
+  ],
+  "assets": {
+   "cover": "assets/cover.jpg",
+   "source_documents": "assets/source"
+  },
+  "tokens": {
+   "motion": [
+    [
+     "motion",
+     "animated text、number、tilt、magnetic、spotlight、dock、carousel"
+    ]
+   ]
+  }
+ },
+ "microkit": {
+  "libraryId": "microkit",
+  "name": "MicroKit · 产品微交互",
+  "tags": [
+   "微交互",
+   "按钮",
+   "输入框",
+   "导航",
+   "React",
+   "MIT"
+  ],
+  "summary": "围绕按钮、输入、导航和标签构建的产品级小动效，可复制 React/CSS/Tailwind 实现。",
+  "evidence": "封面为官网 Open Graph 图片；README 与 MIT 许可证已保存。",
+  "source": {
+   "type": "website_and_repository",
+   "url": "https://microkit.co/",
+   "repository": "https://github.com/henriquegpb/microkit",
+   "license": "MIT"
+  },
+  "reuseNotes": [
+   "适合日常产品反馈。",
+   "优先 transform 与 opacity，并支持 reduced-motion。"
+  ],
+  "assets": {
+   "cover": "assets/cover.png",
+   "source_documents": "assets/source"
+  },
+  "tokens": {
+   "motion": [
+    [
+     "motion",
+     "button feedback、input state、tab transition、navigation feedback"
+    ]
+   ]
+  }
+ },
+ "text-effects": {
+  "libraryId": "css-text-effects",
+  "name": "CSS Text Effects · 标题文字特效",
+  "tags": [
+   "CSS",
+   "文字特效",
+   "Glitch",
+   "Liquid",
+   "Aurora",
+   "CRT"
+  ],
+  "summary": "覆盖 aurora、glitch、typewriter、liquid、chrome、CRT、glass 与 moire 的纯 CSS 标题效果。",
+  "evidence": "官网本轮未返回稳定预览；封面是依据已归档效果分类制作的索引卡，源码文件已保存。",
+  "source": {
+   "type": "website_and_repository",
+   "url": "https://text-effects.colorion.co/",
+   "repository": "https://github.com/ckissi/colorion-text-effects",
+   "license": "官网标注 MIT；仓库元数据未检测到独立许可证文件"
+  },
+  "reuseNotes": [
+   "只用于短标题、活动页或状态。",
+   "长正文保持静态和高对比。"
+  ],
+  "assets": {
+   "cover": "assets/cover.png",
+   "source_documents": "assets/source"
+  },
+  "tokens": {
+   "effects": [
+    [
+     "effects",
+     "aurora、glitch、typewriter、liquid、chrome、split-flap、CRT、glass、moire"
+    ]
+   ]
+  }
+ },
+ "mapcn": {
+  "libraryId": "mapcn",
+  "name": "mapcn · 地图产品组件",
+  "tags": [
+   "地图",
+   "MapLibre",
+   "Marker",
+   "Route",
+   "React",
+   "MIT"
+  ],
+  "summary": "基于 MapLibre、Tailwind 与 shadcn 的地图、标记、弹窗、路线和控制组件。",
+  "evidence": "封面为官网 Open Graph 图片；README 与 MIT 许可证已保存。",
+  "source": {
+   "type": "website_and_repository",
+   "url": "https://www.mapcn.dev/",
+   "repository": "https://github.com/AnmolSaini16/mapcn",
+   "license": "代码 MIT；地图底图与数据服务另行授权"
+  },
+  "reuseNotes": [
+   "适合位置、路线、门店和资产分布产品。",
+   "代码许可与底图/数据许可分开核验。"
+  ],
+  "assets": {
+   "cover": "assets/cover.jpg",
+   "source_documents": "assets/source"
+  },
+  "tokens": {
+   "components": [
+    [
+     "components",
+     "map、marker、popup、tooltip、label、route、controls"
+    ]
+   ]
+  }
+ },
+ "liquid-glass": {
+  "libraryId": "liquid-glass",
+  "name": "Liquid Glass · 实时折射玻璃",
+  "tags": [
+   "液态玻璃",
+   "折射",
+   "React",
+   "SVG Filter",
+   "浮层",
+   "MIT"
+  ],
+  "summary": "让浮层实时折射页面内容的 React headless lens，适合媒体控制、通知和局部操作层。",
+  "evidence": "封面为官网 Open Graph 图片；README 与 MIT 许可证已保存。",
+  "source": {
+   "type": "website_and_repository",
+   "url": "https://glass.samasante.com/",
+   "repository": "https://github.com/samasante/liquid-glass",
+   "license": "MIT"
+  },
+  "reuseNotes": [
+   "只覆盖局部交互层。",
+   "文字和控件保持清晰层。",
+   "始终提供半透明模糊降级。"
+  ],
+  "assets": {
+   "cover": "assets/cover.jpg",
+   "source_documents": "assets/source"
+  },
+  "tokens": {
+   "effects": [
+    [
+     "effects",
+     "live refraction、glass lens、blur fallback、specular highlight"
+    ]
+   ]
+  }
+ }
+}

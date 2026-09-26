@@ -501,9 +501,24 @@ button { color: inherit; }
 .prompt-box { margin: 22px 0; border: 1px solid #c3ae93; background: rgba(255,255,255,.52); }
 .prompt-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-bottom: 1px dashed #c3ae93; background: rgba(185,132,77,.12); }
 .prompt-head .eyebrow { margin: 0; color: #8a6a44; }
-.copy-prompt { flex: none; padding: 7px 13px; border: 1px solid #44352a; border-radius: 2px; background: #44352a; color: #fff8ea; font: 700 12px/1 "Noto Sans SC", sans-serif; cursor: pointer; transition: background .18s ease; }
+.prompt-actions { display: flex; flex: none; gap: 6px; }
+.copy-prompt { padding: 7px 13px; border: 1px solid #44352a; border-radius: 2px; background: #44352a; color: #fff8ea; font: 700 12px/1 "Noto Sans SC", sans-serif; cursor: pointer; transition: background .18s ease; }
 .copy-prompt:hover { background: #5a4736; }
 .copy-prompt.copied { border-color: #2d7b62; background: #2d7b62; }
+.copy-prompt.ghost { background: transparent; color: #44352a; }
+.copy-prompt.ghost:hover { background: rgba(68,53,42,.1); }
+
+.prompt-builder { padding: 12px 14px 4px; border-bottom: 1px dashed #c3ae93; background: rgba(185,132,77,.07); }
+.prompt-builder label { display: block; margin-bottom: 7px; color: #6b5a45; font: 700 12px/1.4 "Noto Sans SC", sans-serif; }
+.prompt-row { display: flex; gap: 6px; }
+.prompt-row input { flex: 1; min-width: 0; padding: 9px 11px; border: 1px solid #c3ae93; border-radius: 2px; background: #fffdf8; color: #3f3227; font: 13px/1.4 "Noto Sans SC", sans-serif; }
+.prompt-row input::placeholder { color: #a8977f; }
+.prompt-row input:focus { outline: 2px solid rgba(45,123,98,.35); outline-offset: -1px; }
+.prompt-row button { flex: none; padding: 0 16px; border: 1px solid #2d7b62; border-radius: 2px; background: #2d7b62; color: #f4fff9; font: 700 12px/1 "Noto Sans SC", sans-serif; cursor: pointer; }
+.prompt-row button:hover { background: #24634f; }
+.prompt-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 9px 0 10px; }
+.prompt-chips button { padding: 4px 9px; border: 1px dashed rgba(68,53,42,.4); border-radius: 999px; background: transparent; color: #6b5a45; font: 11.5px/1.5 "Noto Sans SC", sans-serif; cursor: pointer; }
+.prompt-chips button:hover { border-style: solid; background: rgba(255,255,255,.7); }
 .prompt-text { margin: 0; padding: 14px; max-height: 260px; overflow: auto; white-space: pre-wrap; word-break: break-word; color: #4a3d31; background: transparent; font: 12.5px/1.9 "Noto Sans SC", sans-serif; }
 .prompt-text:focus { outline: 2px solid rgba(45,123,98,.45); outline-offset: -2px; }
 .prompt-hint { margin: 0; padding: 0 14px 12px; color: #8a7963; font-size: 12px; line-height: 1.6; }
@@ -593,5 +608,8 @@ button { color: inherit; }
   .detail-copy { padding: 34px 24px 28px; }
   .detail-copy h2 { font-size: 1.9rem; }
   .prompt-text { max-height: 200px; }
+  .prompt-head { flex-wrap: wrap; }
+  .prompt-actions { width: 100%; }
+  .prompt-actions .copy-prompt { flex: 1; }
   .visual-tabs button { padding: 6px 11px; }
 }

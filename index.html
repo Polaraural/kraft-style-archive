@@ -113,11 +113,24 @@
 
         <section class="prompt-box">
           <div class="prompt-head">
-            <p class="eyebrow">PROMPT / 提示词</p>
-            <button class="copy-prompt" id="copyPrompt" type="button">复制提示词</button>
+            <p class="eyebrow">PROMPT / 复现提示词</p>
+            <div class="prompt-actions">
+              <button class="copy-prompt" id="copyPrompt" type="button">复制</button>
+              <button class="copy-prompt ghost" id="downloadPrompt" type="button">存成素材库模板</button>
+            </div>
           </div>
+
+          <div class="prompt-builder">
+            <label for="promptTarget">我想用这套风格做什么</label>
+            <div class="prompt-row">
+              <input id="promptTarget" type="text" autocomplete="off" placeholder="例如：一个记账 App 的首页" />
+              <button id="generatePrompt" type="button">生成</button>
+            </div>
+            <div class="prompt-chips" id="promptChips"></div>
+          </div>
+
           <pre class="prompt-text" id="detailPrompt" tabindex="0"></pre>
-          <p class="prompt-hint">复制后可直接粘贴给 AI 设计或编码工具，用来复现这套风格与动效。</p>
+          <p class="prompt-hint" id="promptHint">填上你要做的东西，提示词会自动带上这套风格的真实参数。复制后配合 $style-library 使用；下载的 .md 放进「风格素材库/prompts/」就是一条模板。</p>
         </section>
 
         <button class="select-detail" id="selectDetail" type="button">放入本次灵感板</button>
