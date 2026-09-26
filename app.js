@@ -530,3 +530,15 @@ document.addEventListener("keydown", event => {
 });
 
 render();
+
+// 支持 ?style=<id> 深链，便于直接分享某张风格卡
+const deepLink = new URLSearchParams(location.search).get("style");
+if (deepLink) {
+  const target = materials.find(item => item.id === deepLink);
+  if (target) {
+    activeCategory = "all";
+    query = "";
+    render();
+    openDetail(target);
+  }
+}
